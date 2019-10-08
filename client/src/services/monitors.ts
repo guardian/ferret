@@ -1,5 +1,5 @@
 export const listMonitors = (projectId: string) => {
-	fetch(`/api/projects/${projectId}/monitors`).then(res => res.json());
+	return fetch(`/api/projects/${projectId}/monitors`).then(res => res.json());
 };
 
 export const createMonitor = (

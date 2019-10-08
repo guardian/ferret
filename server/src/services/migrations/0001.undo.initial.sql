@@ -1,3 +1,4 @@
+DROP TABLE tags;
 DROP TABLE tweets;
 DROP TABLE monitors;
 DROP TABLE projects;

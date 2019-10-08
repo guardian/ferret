@@ -1,0 +1,14 @@
+{
+	"name": "osmon-worker",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "MIT",
+	"dependencies": {
+		"pg": "^7.12.1",
+		"twitter": "^1.7.1"
+	},
+	"devDependencies": {
+		"@types/node": "^12.7.11",
+		"@types/pg": "^7.11.2"
+	}
+}

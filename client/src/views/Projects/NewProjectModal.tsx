@@ -7,8 +7,12 @@ import styles from './Projects.module.css';
 
 type NewProjectModalProps = {
 	onSuccess: () => void;
+	onError: () => void;
 };
-export const NewProjectModal: FC<NewProjectModalProps> = ({ onSuccess }) => {
+export const NewProjectModal: FC<NewProjectModalProps> = ({
+	onSuccess,
+	onError,
+}) => {
 	const [newName, setNewName] = useState('');
 	const [newImage, setNewImage] = useState('/kobane.jpeg');
 
@@ -16,9 +20,9 @@ export const NewProjectModal: FC<NewProjectModalProps> = ({ onSuccess }) => {
 		<Panel title="New Project">
 			<Form
 				onSubmit={() =>
-					createProject(newName, newImage).then(() => {
-						onSuccess();
-					})
+					createProject(newName, newImage)
+						.then(onSuccess)
+						.catch(onError)
 				}
 			>
 				<FormRow title="Name">

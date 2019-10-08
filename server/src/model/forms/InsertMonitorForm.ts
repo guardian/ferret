@@ -1,6 +1,6 @@
 import { check } from 'express-validator';
 
 export const insertMonitorFormValidators = [
-	check('name').isAlphanumeric(),
+	check('name').isString(),
 	check('query').isString(),
 ];

@@ -13,7 +13,7 @@ export class MonitorsController {
 
 	listMonitors = (req: Request, res: Response) => {
 		this.db.monitorQueries
-			.listMonitors()
+			.listMonitors(req.params.projectId)
 			.then(monitors => {
 				res.json(monitors);
 			})
@@ -42,7 +42,7 @@ export class MonitorsController {
 			const { name, query } = req.body;
 
 			this.db.monitorQueries
-				.insertMonitor(name, query)
+				.insertMonitor(req.params.projectId, name, query)
 				.then(() => res.status(201).send())
 				.catch(err => handleFailure(res, err, 'Failed to insert monitor'));
 		},

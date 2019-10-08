@@ -1,17 +1,22 @@
-import React, { FC, useState } from 'react';
-import {
-	CenteredPage,
-	Table,
-	Button,
-	WithModal,
-	Form,
-	FormRow,
-	Panel,
-} from '@guardian/threads';
+import React, { FC, useState, useEffect } from 'react';
+import { CenteredPage, Table, Button, WithModal } from '@guardian/threads';
 import { NewMonitorModal } from './NewMonitorModal';
+import { Monitor } from '../../model/Monitor';
+import { listMonitors } from '../../services/monitors';
+import { match } from 'react-router';
 
-export const Monitors: FC<{}> = () => {
+type MonitorsProps = {
+	match: match<{ projectId: string }>;
+};
+export const Monitors: FC<MonitorsProps> = ({ match }) => {
 	const [newModalOpen, setNewModalOpen] = useState(false);
+
+	const [monitors, setMonitors] = useState([] as Monitor[]);
+	const projectId = match.params.projectId;
+
+	useEffect(() => {
+		listMonitors(projectId).then(m => setMonitors(m));
+	}, [projectId]);
 
 	return (
 		<CenteredPage>
@@ -21,7 +26,14 @@ export const Monitors: FC<{}> = () => {
 				setIsOpen={setNewModalOpen}
 				proxy={() => <Button>New Monitor</Button>}
 			>
-				<NewMonitorModal onSuccess={() => {}} />
+				<NewMonitorModal
+					projectId={projectId}
+					onSuccess={() => {
+						setNewModalOpen(false);
+						listMonitors(projectId).then(m => setMonitors(m));
+					}}
+					onError={() => alert('Failed to create monitor')}
+				/>
 			</WithModal>
 			<h1>Monitors</h1>
 			<p>
@@ -31,17 +43,23 @@ export const Monitors: FC<{}> = () => {
 			<Table style={{ width: '100%' }}>
 				<thead>
 					<tr>
-						<th>Monitor</th>
+						<th>Name</th>
+						<th>Query</th>
 						<th>Last Updated</th>
 						<th>Count</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>#TwitterKurds</td>
-						<td>{new Date().toLocaleString()}</td>
-						<td>{Math.floor(Math.random() * 1000)}</td>
-					</tr>
+					{monitors.map(m => {
+						return (
+							<tr>
+								<td>{m.name}</td>
+								<td>{m.query}</td>
+								<td>{new Date().toLocaleString()}</td>
+								<td>{Math.floor(Math.random() * 1000)}</td>
+							</tr>
+						);
+					})}
 				</tbody>
 			</Table>
 		</CenteredPage>

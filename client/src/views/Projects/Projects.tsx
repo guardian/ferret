@@ -6,6 +6,7 @@ import { Project } from '../../model/Project';
 import { getProjects } from '../../services/project';
 import { NewProjectModal } from './NewProjectModal';
 import styles from './Projects.module.css';
+import { Tweet } from '../../components/Tweet/Tweet';
 
 export const Projects = () => {
 	const [projects, setProjects] = useState([] as Project[]);
@@ -26,11 +27,13 @@ export const Projects = () => {
 				<NewProjectModal
 					onSuccess={() => {
 						setCreateModalOpen(false);
-						getProjects();
+						getProjects().then(p => setProjects(p));
 					}}
+					onError={() => alert('Failed to create project')}
 				/>
 			</WithModal>
 			<hr />
+			<Tweet media="" />
 			<div className={styles.cardContainer}>
 				{projects.map(p => (
 					<ProjectCard

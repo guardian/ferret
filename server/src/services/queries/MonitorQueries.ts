@@ -9,10 +9,11 @@ export class MonitorQueries {
 		this.pool = pool;
 	}
 
-	listMonitors = async (): Promise<Monitor[]> => {
-		const { rows } = await this.pool.query(
-			'SELECT id, name, query FROM monitors'
-		);
+	listMonitors = async (projectId: string): Promise<Monitor[]> => {
+		const { rows } = await this.pool.query({
+			text: 'SELECT id, name, query FROM monitors WHERE project_id = $1',
+			values: [projectId],
+		});
 		return rows.map(row => new Monitor(row['id'], row['name'], row['query']));
 	};
 
@@ -25,11 +26,16 @@ export class MonitorQueries {
 		return new Monitor(rows[0]['id'], rows[0]['name'], rows[0]['query']);
 	};
 
-	insertMonitor = async (name: string, query: string): Promise<void> => {
+	insertMonitor = async (
+		projectId: string,
+		name: string,
+		query: string
+	): Promise<void> => {
 		// TODO permissions check!!
 		await this.pool.query({
-			text: 'INSERT INTO monitors (id, name, query) VALUES ($1, $2, $3)',
-			values: [uuidv4(), name, query],
+			text:
+				'INSERT INTO monitors (id, project_id, name, query, count) VALUES ($1, $2, $3, $4, 0)',
+			values: [uuidv4(), projectId, name, query],
 		});
 
 		return;

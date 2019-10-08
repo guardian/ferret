@@ -7,6 +7,7 @@ import { Database } from './services/Database';
 //import { Storage } from './services/storage';
 import { MonitorsController } from './controllers/MonitorController';
 import { ProjectsController } from './controllers/ProjectController';
+import { TagController } from './controllers/TagController';
 
 async function main() {
 	// Services
@@ -22,6 +23,7 @@ async function main() {
 	const users = new UsersController(db);
 	const monitors = new MonitorsController(db);
 	const projects = new ProjectsController(db);
+	const tags = new TagController(db);
 
 	// Routes
 	const port = 9999;
@@ -32,11 +34,15 @@ async function main() {
 	app.get('/api/users/:username', users.getUser);
 	app.post('/api/users', ...users.insertUser);
 
+	app.get('/api/tags', tags.listTags);
+	app.post('/api/tags', ...tags.insertTag);
+
 	app.get('/api/projects', projects.listProjects);
 	app.post('/api/projects', ...projects.insertProject);
 
-	app.get('/api/monitors/:id', monitors.getMonitor);
-	app.post('/api/monitors', ...monitors.insertMonitor);
+	app.get('/api/projects/:projectId/monitors', monitors.listMonitors);
+	app.get('/api/projects/:projectId/monitors/:id', monitors.getMonitor);
+	app.post('/api/projects/:projectId/monitors', ...monitors.insertMonitor);
 
 	app.get('/api/management/healthcheck', (req: Request, res: Response) =>
 		res.send('OK')
