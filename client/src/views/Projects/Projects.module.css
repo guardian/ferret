@@ -1,0 +1,14 @@
+.previewCard {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.cardContainer {
+	display: flex;
+	flex-direction: row;
+}
+
+.cardContainer > * {
+	margin: var(--sp-base);
+}
