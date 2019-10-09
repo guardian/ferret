@@ -40,9 +40,10 @@ async function main() {
 	app.get('/api/projects', projects.listProjects);
 	app.post('/api/projects', ...projects.insertProject);
 
-	app.get('/api/projects/:projectId/monitors', monitors.listMonitors);
-	app.get('/api/projects/:projectId/monitors/:id', monitors.getMonitor);
-	app.post('/api/projects/:projectId/monitors', ...monitors.insertMonitor);
+	app.get('/api/projects/:pId/monitors', monitors.listMonitors);
+	app.get('/api/projects/:pId/monitors/:mId', monitors.getMonitor);
+	app.post('/api/projects/:pId/monitors', ...monitors.insertMonitor);
+	app.put('/api/projects/:pId/monitors/:mId', ...monitors.updateMonitor);
 
 	app.get('/api/management/healthcheck', (req: Request, res: Response) =>
 		res.send('OK')

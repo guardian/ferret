@@ -6,17 +6,17 @@ import { listMonitors } from '../../services/monitors';
 import { match } from 'react-router';
 
 type MonitorsProps = {
-	match: match<{ projectId: string }>;
+	match: match<{ pId: string }>;
 };
 export const Monitors: FC<MonitorsProps> = ({ match }) => {
 	const [newModalOpen, setNewModalOpen] = useState(false);
 
 	const [monitors, setMonitors] = useState([] as Monitor[]);
-	const projectId = match.params.projectId;
+	const pId = match.params.pId;
 
 	useEffect(() => {
-		listMonitors(projectId).then(m => setMonitors(m));
-	}, [projectId]);
+		listMonitors(pId).then(m => setMonitors(m));
+	}, [pId]);
 
 	return (
 		<CenteredPage>
@@ -27,10 +27,10 @@ export const Monitors: FC<MonitorsProps> = ({ match }) => {
 				proxy={() => <Button>New Monitor</Button>}
 			>
 				<NewMonitorModal
-					projectId={projectId}
+					pId={pId}
 					onSuccess={() => {
 						setNewModalOpen(false);
-						listMonitors(projectId).then(m => setMonitors(m));
+						listMonitors(pId).then(m => setMonitors(m));
 					}}
 					onError={() => alert('Failed to create monitor')}
 				/>

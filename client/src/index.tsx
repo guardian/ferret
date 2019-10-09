@@ -17,7 +17,7 @@ render(
 		<Router history={history}>
 			<FullScreenApp>
 				<HeaderShell withTextLogo>
-					<Route path="/projects/:projectId" component={Monitors} />
+					<Route path="/projects/:pId" component={Monitors} />
 					<Route exact path="/projects" component={Projects} />
 					<Redirect to={{ pathname: '/projects' }} />
 				</HeaderShell>

@@ -15,7 +15,6 @@ CREATE TABLE projects (
     name       TEXT NOT NULL,
     image      TEXT NOT NULL,
     created_by TEXT, -- REFERENCES users(id) ON DELETE RESTRICT NOT NULL,
-
     created_on TIMESTAMPTZ NOT NULL
 );
 
@@ -25,12 +24,19 @@ CREATE TABLE monitors (
     name         TEXT NOT NULL,
     query        TEXT NOT NULL,
     count        INT NOT NULL,
-    last_updated TIMESTAMPTZ
+    updated_at   TIMESTAMPTZ,
+    since_id     TEXT 
 );
 
 CREATE TABLE tweets (
+    tweet_id TEXT PRIMARY KEY,
+    status   JSONB NOT NULL,
+);
+
+CREATE TABLE monitor_tweets (
     monitor_id TEXT REFERENCES monitors(id) ON DELETE CASCADE NOT NULL,
-    full_tweet JSONB NOT NULL
+    tweet_id   TEXT REFERENCES tweets(id) ON DELETE CASCADE NOT NULL,
+    PRIMARY KEY(monitor_id, tweet_id)
 );
 
 CREATE TABLE tags (

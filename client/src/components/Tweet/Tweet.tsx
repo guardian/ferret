@@ -5,6 +5,7 @@ import {
 	Button,
 	getIncrementingAccent,
 	getAccentColor,
+	MenuSeparator,
 } from '@guardian/threads';
 import { MdLabelOutline, MdNoteAdd } from 'react-icons/md';
 
@@ -45,7 +46,7 @@ export const Tweet: FC<TweetProps> = ({ media }) => {
 					)}
 				>
 					<TagMenuItem
-						label="HTS"
+						label="Over 9000 Bijis"
 						color={getAccentColor(getIncrementingAccent(0))}
 					/>
 					<TagMenuItem
@@ -60,6 +61,7 @@ export const Tweet: FC<TweetProps> = ({ media }) => {
 						label="MIT"
 						color={getAccentColor(getIncrementingAccent(3))}
 					/>
+					<MenuSeparator />
 					<MenuItem
 						onClick={() => (document.documentElement.dataset.theme = 'aero')}
 						label="Delete"
