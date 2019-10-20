@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { CenteredPage, Table, Button, WithModal } from '@guardian/threads';
 import { NewMonitorModal } from './NewMonitorModal';
-import { Monitor } from 'ferret-common';
+import { Monitor } from '@guardian/ferret-common';
 import { listMonitors } from '../../services/monitors';
 import { match } from 'react-router';
 import { Link } from 'react-router-dom';

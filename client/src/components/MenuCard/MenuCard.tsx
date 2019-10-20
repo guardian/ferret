@@ -1,6 +1,6 @@
 import React, { FC, ReactNode, CSSProperties } from 'react';
 
-import styles from './ProjectCard.module.css';
+import styles from './MenuCard.module.css';
 import { MdArrowForward } from 'react-icons/md';
 
 type ProjectCardProps = {
@@ -14,7 +14,7 @@ type ProjectCardProps = {
 	disabled?: boolean;
 };
 
-export const ProjectCard: FC<ProjectCardProps> = ({
+export const MenuCard: FC<ProjectCardProps> = ({
 	title,
 	onClick,
 	backgroundColor,

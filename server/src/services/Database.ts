@@ -71,7 +71,7 @@ export class Database {
 			})
 			.catch(error => {
 				console.error('Failed to apply migrations');
-				console.log(error);
+				console.error(error);
 				throw error;
 			});
 	};

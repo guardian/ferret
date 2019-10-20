@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect } from 'react';
 import { CenteredPage } from '@guardian/threads';
 import { match } from 'react-router';
 import { listMonitorTweets, getMonitor } from '../../services/monitors';
-import { Monitor as MonitorType } from 'ferret-common';
+import { Monitor as MonitorType } from '@guardian/ferret-common';
 import { Tweet } from '../../components/Tweet/Tweet';
 
 import styles from './Monitor.module.css';

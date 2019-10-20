@@ -1,6 +1,7 @@
 import React, { useReducer, FC, ReactNode, useContext, Reducer } from 'react';
 import { User } from '@guardian/ferret-common';
 import { setAuthToken } from '../services/authFetch';
+import jwtDecode from 'jwt-decode';
 
 type AuthState = {
 	token?: string;
@@ -13,21 +14,27 @@ const initialState: AuthState = {
 };
 
 const AUTH_SET_TOKEN = 'AUTH_SET_TOKEN';
+const AUTH_CLEAR_TOKEN = 'AUTH_CLEAR_TOKEN';
 // Actions
 export const setToken = (token?: string) => ({
 	type: AUTH_SET_TOKEN,
 	token,
 });
 
+export const clearToken = () => ({});
+
 // Reducer
 const reducer = (state: AuthState, action: any) => {
 	switch (action.type) {
 		case AUTH_SET_TOKEN:
+			// Set the auth token for authFetch
 			setAuthToken(action.token);
 			return {
-				...state,
+				user: jwtDecode(action.token) as User,
 				token: action.token,
-			} as AuthState;
+			};
+		case AUTH_CLEAR_TOKEN:
+			return initialState;
 		default:
 			return state;
 	}
@@ -54,4 +61,4 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 	);
 };
 
-export const useAuthStateValue = () => useContext(AuthContext);
+export const useAuthState = () => useContext(AuthContext);

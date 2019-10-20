@@ -22,7 +22,6 @@ export class MonitorsController {
 	};
 
 	getMonitor = (req: Request, res: Response) => {
-		console.log(req.params);
 		this.db.monitorQueries
 			.getMonitor(req.params.mId)
 			.then(monitor => res.json(monitor))

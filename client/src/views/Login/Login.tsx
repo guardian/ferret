@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { CenteredPage, FormRow, Button, Panel, Form } from '@guardian/threads';
 import { login } from '../../services/login';
-import { useAuthStateValue, setToken } from '../../state/AuthState';
+import { useAuthState, setToken } from '../../state/AuthState';
 
 export const Login = () => {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 
-	const [_, dispatch] = useAuthStateValue();
+	const [_, dispatch] = useAuthState();
 
 	return (
 		<CenteredPage>

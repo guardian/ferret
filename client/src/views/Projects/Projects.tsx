@@ -1,19 +1,20 @@
 import { CenteredPage, WithModal } from '@guardian/threads';
-import { Project } from 'ferret-common';
 import React, { useEffect, useState } from 'react';
 import { ControlBox } from '../../components/ControlBox/ControlBox';
-import { ProjectCard } from '../../components/ProjectCard/ProjectCard';
+import { MenuCard } from '../../components/MenuCard/MenuCard';
 import { history } from '../../index';
 import { NewProjectModal } from './NewProjectModal';
 import styles from './Projects.module.css';
 import { getProjects } from '../../services/project';
+import { useProjectsState, setProjects } from '../../state/ProjectsState';
 
 export const Projects = () => {
-	const [projects, setProjects] = useState([] as Project[]);
+	const [projects, dispatch] = useProjectsState();
+
 	useEffect(() => {
-		getProjects().then(p => {
-			setProjects(p);
-		});
+		getProjects()
+			.then(p => dispatch(setProjects(p)))
+			.catch(e => console.error(e));
 	}, []);
 
 	const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -23,7 +24,7 @@ export const Projects = () => {
 			<ControlBox>
 				<WithModal
 					proxy={() => (
-						<ProjectCard title="New Project" backgroundColor="red" />
+						<MenuCard title="New Project" backgroundImage="/images/plus.png" />
 					)}
 					isOpen={createModalOpen}
 					setIsOpen={setCreateModalOpen}
@@ -32,10 +33,8 @@ export const Projects = () => {
 						onSuccess={() => {
 							setCreateModalOpen(false);
 							getProjects()
-								.then(p => setProjects(p))
-								.catch(e => {
-									console.error(e);
-								});
+								.then(p => dispatch(setProjects(p)))
+								.catch(e => console.error(e));
 						}}
 						onError={() => alert('Failed to create project')}
 					/>
@@ -45,7 +44,7 @@ export const Projects = () => {
 			<div className={styles.cardContainer}>
 				<div className={styles.cards}>
 					{projects.map(p => (
-						<ProjectCard
+						<MenuCard
 							key={p.id}
 							title={p.name}
 							onClick={() => history.push(`/projects/${p.id}`)}

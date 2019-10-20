@@ -100,7 +100,6 @@ export const processTweets = async (
 
 	return;
 	// while (tweets.search_metadata.next_results) {
-	// 	console.log(`getting page ${++i}`);
 	// 	// extract new maxId from next_results
 	// 	const maxIdMatch = /max_id=(\d.*)/.exec(
 	// 		tweets.search_metadata.next_results

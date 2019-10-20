@@ -1,7 +1,7 @@
 import React, { useState, FC } from 'react';
 import { Panel, Form, FormRow, Button } from '@guardian/threads';
 import { createProject } from '../../services/project';
-import { ProjectCard } from '../../components/ProjectCard/ProjectCard';
+import { MenuCard } from '../../components/MenuCard/MenuCard';
 
 import styles from './Projects.module.css';
 
@@ -43,7 +43,7 @@ export const NewProjectModal: FC<NewProjectModalProps> = ({
 				</FormRow>
 				<FormRow title="Preview">
 					<div className={styles.previewCard}>
-						<ProjectCard
+						<MenuCard
 							title={newName}
 							onClick={() => {}}
 							backgroundImage={newImage}

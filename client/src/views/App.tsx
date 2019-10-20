@@ -8,6 +8,7 @@ import {
 import React from 'react';
 import { MdAccountCircle } from 'react-icons/md';
 import { Redirect, Route, Switch } from 'react-router';
+import { clearToken, useAuthState } from '../state/AuthState';
 import { Dashboard } from './Dashboard/Dashboard';
 import { Login } from './Login/Login';
 import { Monitor } from './Monitor/Monitor';
@@ -16,10 +17,9 @@ import { Project } from './Project/Project';
 import { Projects } from './Projects/Projects';
 import { Settings } from './Settings/Settings';
 import { TimelineEditor } from './TimelineEditor/TimelineEditor';
-import { useAuthStateValue, setToken } from '../state/AuthState';
 
 export const App = () => {
-	const [{ token }, dispatch] = useAuthStateValue();
+	const [{ token, user }, dispatch] = useAuthState();
 
 	const isAuthed = !!token;
 
@@ -38,7 +38,7 @@ export const App = () => {
 		<WithDropdownMenu
 			proxy={() => (
 				<Button appearance="toolset" isDropdown icon={<MdAccountCircle />}>
-					Sam Cutler
+					{user ? user.displayName : '<Unknown User>'}
 				</Button>
 			)}
 		>
@@ -48,7 +48,7 @@ export const App = () => {
 			<MenuItem
 				label="Logout"
 				onClick={() => {
-					dispatch(setToken(undefined));
+					dispatch(clearToken());
 				}}
 			/>
 		</WithDropdownMenu>

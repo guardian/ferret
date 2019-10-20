@@ -1,17 +1,39 @@
 import { CenteredPage } from '@guardian/threads';
-import React from 'react';
+import React, { FC } from 'react';
+import { match } from 'react-router';
 import { ControlBox } from '../../components/ControlBox/ControlBox';
-import { ProjectCard } from '../../components/ProjectCard/ProjectCard';
+import { MenuCard } from '../../components/MenuCard/MenuCard';
+import { useProjectsState } from '../../state/ProjectsState';
 
-export const Project = () => {
-	return (
-		<CenteredPage>
-			<h1>UK General Election</h1>
-			<ControlBox>
-				<ProjectCard title="New Timeline" backgroundColor="red" />
-				<ProjectCard disabled title="New Workspace" backgroundColor="red" />
-				<ProjectCard disabled title="New Note" backgroundColor="red" />
-			</ControlBox>
-		</CenteredPage>
-	);
+type ProjectProps = {
+	match: match<{ pId: string }>;
+};
+
+export const Project: FC<ProjectProps> = ({ match }) => {
+	const [projects] = useProjectsState();
+
+	const project = projects.find(p => p.id === match.params.pId);
+
+	if (project) {
+		return (
+			<CenteredPage>
+				<h1>{project.name}</h1>
+				<ControlBox>
+					<MenuCard title="New Timeline" backgroundImage="/images/plus.png" />
+					<MenuCard
+						disabled
+						title="New Workspace"
+						backgroundImage="/images/plus.png"
+					/>
+					<MenuCard
+						disabled
+						title="New Note"
+						backgroundImage="/images/plus.png"
+					/>
+				</ControlBox>
+			</CenteredPage>
+		);
+	} else {
+		return null;
+	}
 };

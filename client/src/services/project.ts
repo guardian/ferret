@@ -5,6 +5,11 @@ export const getProjects = async () => {
 
 	return await res.json();
 };
+export const getProject = async (id: string) => {
+	const res = await authFetch(`/api/projects/${id}`);
+
+	return await res.json();
+};
 
 export const createProject = (name: string, image: string) => {
 	return authFetch('/api/projects', {
