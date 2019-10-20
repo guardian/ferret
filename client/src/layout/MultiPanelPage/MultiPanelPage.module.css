@@ -11,13 +11,13 @@
 }
 
 .panel {
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	height: 100%;
 }
 
 .panelHeader {
-	position: relative;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;

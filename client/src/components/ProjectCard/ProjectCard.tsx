@@ -31,6 +31,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({
 			disabled={disabled}
 			className={styles.projectCard}
 			style={mixedStyle}
+			onClick={onClick}
 		>
 			{!!rightControl && (
 				<div className={styles.rightControl}>{rightControl}</div>

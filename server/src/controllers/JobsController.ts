@@ -10,11 +10,11 @@ export class JobsController {
 	}
 
 	listJobs = (req: Request, res: Response) => {
-		this.db.jobQueries
-			.listJobs()
-			.then(jobs => {
-				res.json(users);
-			})
-			.catch(err => handleFailure(res, err, 'Failed to list jobs'));
+		//this.db.jobQueries
+		//	.listJobs()
+		//	.then(jobs => {
+		//		res.json(users);
+		//	})
+		//	.catch(err => handleFailure(res, err, 'Failed to list jobs'));
 	};
 }

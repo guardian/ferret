@@ -1,7 +1,8 @@
-import { Card, getIncrementingAccent } from '@guardian/threads';
-import React, { FC, useState } from 'react';
+import { Card, getIncrementingAccent, FormRow, Form } from '@guardian/threads';
+import React, { FC, useState, DragEventHandler } from 'react';
 import { EditableText } from '../../components/EditableText/EditableText';
 import styles from './EventCard.module.css';
+import { EvidenceCard } from './EvidenceCard';
 
 type Evidence = {
 	name: string;
@@ -28,8 +29,20 @@ export const EventCard: FC<EventCardProps> = ({
 	deleteEvent,
 }) => {
 	const { title, date, text, evidence } = event;
+	const [draggingOver, setDraggingOver] = useState(false);
 
-	const [editingBody, setEditingBody] = useState(false);
+	const handleDragOver: DragEventHandler = e => {
+		const { files, items } = e.dataTransfer;
+		if (e.dataTransfer.files.length > 0) {
+			console.log('drop file!', e.dataTransfer.files);
+			setDraggingOver(true);
+		}
+
+		if (e.dataTransfer.items.length > 0) {
+			console.log('drop item!', e.dataTransfer.items);
+			setDraggingOver(true);
+		}
+	};
 
 	return (
 		<Card
@@ -45,30 +58,29 @@ export const EventCard: FC<EventCardProps> = ({
 			onDelete={deleteEvent}
 			accent={getIncrementingAccent(index)}
 		>
-			<div>
-				<EditableText
-					text={text}
-					multiline
-					onChange={text => {
-						updateEvent({ ...event, text });
-					}}
-				/>
-				{evidence.length > 0 && (
-					<div className={styles.cardEvidence}>
-						Links/Evidence/Attachments
-						<ul className={styles.cardEvidenceItems}>
-							{evidence.length === 0 ? (
-								<li className={styles.cardEvidenceItemPlaceholder}>
-									Add evidence
-								</li>
-							) : (
-								evidence.map(e => (
-									<li className={styles.cardEvidenceItem}>{e.name}</li>
-								))
-							)}
-						</ul>
-					</div>
-				)}
+			<div
+				className={styles.card}
+				onDragOver={handleDragOver}
+				onDragLeave={() => setDraggingOver(false)}
+			>
+				{draggingOver && <div className={styles.dropIndicator}>Drop it!</div>}
+				<FormRow title="Description">
+					<EditableText
+						text={text}
+						multiline
+						onChange={text => {
+							updateEvent({ ...event, text });
+						}}
+					/>
+				</FormRow>
+				<FormRow title="Evidence">
+					<ul className={styles.cardEvidenceItems}>
+						{evidence.map(e => (
+							<EvidenceCard type="link" title={e.name} />
+						))}
+						<EvidenceCard type="placeholder" title="Add" />
+					</ul>
+				</FormRow>
 			</div>
 		</Card>
 	);

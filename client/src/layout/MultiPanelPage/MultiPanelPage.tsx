@@ -1,14 +1,6 @@
-import React, { useState, FC, ReactNode, MouseEventHandler } from 'react';
-import styles from './MultiPanelPage.module.css';
-import {
-	Button,
-	WithDropdownMenu,
-	MenuItem,
-	MenuSeparator,
-	WithModal,
-} from '@guardian/threads';
-import { MdAddCircleOutline, MdMenu } from 'react-icons/md';
+import React, { FC, MouseEventHandler, ReactNode, useState } from 'react';
 import { useEventListener } from '../../util/useEventListener';
+import styles from './MultiPanelPage.module.css';
 
 export type PanelData = {
 	id: string;
@@ -77,21 +69,24 @@ const Panel: FC<PanelProps> = ({
 	useEventListener('mouseup', onResizeMouseUp);
 
 	return (
-		<div className={styles.panel} style={{ minWidth: width + widthDiff }}>
+		<div
+			className={styles.panel}
+			style={{ minWidth: width + widthDiff, width: width + widthDiff }}
+		>
 			<div className={styles.panelHeader}>
 				<div className={styles.title}>{title}</div>
 				{!!menu && menu}
-				{onResizePanel && (
-					<div
-						className={styles.panelResizeHandle}
-						onMouseDown={onResizerMouseDown}
-						onMouseUp={onResizeMouseUp}
-					>
-						<div className={styles.panelResizeHandleVisual} />
-					</div>
-				)}
 			</div>
 			<div className={styles.panelBody}>{!!children && children}</div>
+			{onResizePanel && (
+				<div
+					className={styles.panelResizeHandle}
+					onMouseDown={onResizerMouseDown}
+					onMouseUp={onResizeMouseUp}
+				>
+					<div className={styles.panelResizeHandleVisual} />
+				</div>
+			)}
 		</div>
 	);
 };

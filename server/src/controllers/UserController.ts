@@ -22,10 +22,12 @@ export class UsersController {
 
 	getUser = (req: Request, res: Response) => {
 		this.db.userQueries
-			.getUser(req.params.username)
+			.getUser(req.params.uId)
 			.then(user => res.json(user))
 			.catch(err => handleFailure(res, err, 'Failed to get user'));
 	};
+
+	login = (req: Request, res: Response) => {};
 
 	insertUser = [
 		insertUserFormValidators,
@@ -48,7 +50,7 @@ export class UsersController {
 		},
 	];
 
-	updateSetting = [
+	patchSetting = [
 		async (req: Request, res: Response) => {
 			const errors = validationResult(req);
 
@@ -59,12 +61,12 @@ export class UsersController {
 				});
 			}
 
-			const { username, displayName, password } = req.body;
+			const { settings } = req.body;
 
 			this.db.userQueries
-				.insertUser(username, displayName, password)
+				.updateSetting(req.params.uId, settings)
 				.then(() => res.status(201).send())
 				.catch(err => handleFailure(res, err, 'Failed to insert user'));
-		},)
-	]
+		},
+	];
 }

@@ -14,7 +14,10 @@ const fromFsRoot = (path: string) => {
 
 const required = (directory: string, file: string): string => {
 	try {
-		return fs.readFileSync(fromFsRoot(`${directory}/${file}`)).toString();
+		return fs
+			.readFileSync(fromFsRoot(`${directory}/${file}`))
+			.toString()
+			.trim();
 	} catch (err) {
 		throw new Error(`Failed to get config at '${directory}/${file}' - ${err}`);
 	}
@@ -24,6 +27,9 @@ export const getConfig = () => {
 	const config = process.env['CONFIG_PATH']!;
 
 	return {
+		app: {
+			secret: required(config, 'app_secret'),
+		},
 		database: {
 			host: required(config, 'db_host'),
 			port: Number(required(config, 'db_port')),

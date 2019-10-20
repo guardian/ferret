@@ -1,5 +1,5 @@
 import { Pool } from 'pg';
-import { Monitor } from 'ferret-common';
+import { Monitor } from '@guardian/ferret-common';
 import uuidv4 from 'uuid';
 import { transactionally } from './helpers';
 

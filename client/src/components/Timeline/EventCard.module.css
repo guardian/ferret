@@ -1,28 +1,21 @@
-.cardEvidence {
-	border-top: 1px solid var(--color-border);
+.card {
+	position: relative;
 	padding: var(--sp-base);
 }
 
 .cardEvidenceItems {
 	list-style-type: none;
 	padding: var(--sp-base);
+	margin: 0;
 	display: flex;
 	flex-direction: row;
+	background: red;
 }
-
-.cardEvidenceItem {
-	border-radius: var(--radius-default);
-	border: 1px solid var(--color-border);
-	padding: var(--sp-base);
-	height: 100px;
-	width: 100px;
-}
-
-.cardEvidenceItemPlaceholder {
-	composes: cardEvidenceItem;
-	background: var(--color-secondary);
-	border: dashed var(--sp-small) var(--color-border);
-	text-align: center;
-	vertical-align: middle;
-	line-height: 100px;
+.dropIndicator {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	filter: blur(3px);
 }

@@ -29,6 +29,7 @@ export const NewPanelModal: FC<NewPanelModalProp> = ({ onSubmit }) => {
 	const submit = () => {
 		onSubmit({ id: uuidv4(), width: 500, title, menu });
 	};
+
 	return (
 		<Panel title="New Panel">
 			<Form onSubmit={submit}>

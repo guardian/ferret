@@ -3,6 +3,7 @@ import { handleFailure } from './helpers';
 import { Request, Response } from 'express';
 import { insertProjectFormValidators } from '../model/forms/InsertProjectForm';
 import { validationResult } from 'express-validator';
+import { User } from '@guardian/ferret-common';
 
 export class ProjectsController {
 	db: Database;
@@ -34,8 +35,9 @@ export class ProjectsController {
 
 			const { name, image } = req.body;
 
+			const user = req.user as User;
 			this.db.projectQueries
-				.insertProject(name, image, 'default')
+				.insertProject(name, image, user.id)
 				.then(() => res.status(201).send())
 				.catch(err => handleFailure(res, err, 'Failed to insert project'));
 		},

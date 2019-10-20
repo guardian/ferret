@@ -1,18 +1,11 @@
-import React, { useState, ReactNode, FC } from 'react';
+import { Button, WithModal } from '@guardian/threads';
+import React, { FC, useState } from 'react';
+import { MdAddCircle } from 'react-icons/md';
+import { Timeline } from '../../components/Timeline/Timeline';
 import {
 	MultiPanelPage,
 	PanelData,
 } from '../../layout/MultiPanelPage/MultiPanelPage';
-import {
-	MenuItem,
-	Menu,
-	WithDropdownMenu,
-	Button,
-	WithModal,
-} from '@guardian/threads';
-import { Timeline } from '../../components/Timeline/Timeline';
-import { MdMenu, MdAddCircle } from 'react-icons/md';
-import { NewMonitorModal } from '../Monitors/NewMonitorModal';
 import { NewPanelModal } from './NewPanelModal';
 
 type TimelineEditorProps = {
@@ -23,7 +16,7 @@ export const TimelineEditor: FC<TimelineEditorProps> = ({ title }) => {
 	const [panels, setPanels] = useState([
 		{
 			id: 'timeline',
-			title: 'Timeline ',
+			title: 'Timeline with an extremely long name whats going on',
 			width: 500,
 			children: <Timeline />,
 		},

@@ -1,6 +1,7 @@
 {
-	"name": "ferret-common",
+	"name": "@guardian/ferret-common",
 	"version": "1.0.0",
+	"main": "dist/index.js",
 	"module": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"files": [
@@ -9,7 +10,7 @@
 	],
 	"scripts": {
 		"clean": "rm -r ./dist",
-		"build": "mkdir -p ./dist && tsc"
+		"build": "mkdir -p ./dist && tsc && yarn link"
 	},
 	"devDependencies": {
 		"typescript": "^3.2.4"

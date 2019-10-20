@@ -1,5 +1,5 @@
 import { Pool } from 'pg';
-import { Project } from '../../model/Project';
+import { Project } from '@guardian/ferret-common';
 import uuidv4 from 'uuid';
 
 export class ProjectQueries {

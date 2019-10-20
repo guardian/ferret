@@ -1,28 +1,21 @@
-import { Button, CenteredPage, WithModal } from '@guardian/threads';
+import { CenteredPage, WithModal } from '@guardian/threads';
 import { Project } from 'ferret-common';
 import React, { useEffect, useState } from 'react';
+import { ControlBox } from '../../components/ControlBox/ControlBox';
 import { ProjectCard } from '../../components/ProjectCard/ProjectCard';
 import { history } from '../../index';
-import { getProjects } from '../../services/project';
 import { NewProjectModal } from './NewProjectModal';
 import styles from './Projects.module.css';
-import { MdCreateNewFolder } from 'react-icons/md';
-import { ControlBox } from '../../components/ControlBox/ControlBox';
+import { getProjects } from '../../services/project';
 
 export const Projects = () => {
 	const [projects, setProjects] = useState([] as Project[]);
 	useEffect(() => {
-		//getProjects().then(p => setProjects(p));
+		getProjects().then(p => {
+			setProjects(p);
+		});
 	}, []);
 
-	const p = [
-		{ id: '123', name: 'project', image: '/kobane.jpeg' },
-		{ id: '123', name: 'project', image: '/kobane.jpeg' },
-		{ id: '123', name: 'project', image: '/kobane.jpeg' },
-		{ id: '123', name: 'project', image: '/kobane.jpeg' },
-		{ id: '123', name: 'project', image: '/kobane.jpeg' },
-		{ id: '123', name: 'project', image: '/kobane.jpeg' },
-	];
 	const [createModalOpen, setCreateModalOpen] = useState(false);
 
 	return (
@@ -38,7 +31,11 @@ export const Projects = () => {
 					<NewProjectModal
 						onSuccess={() => {
 							setCreateModalOpen(false);
-							//getProjects().then(p => setProjects(p));
+							getProjects()
+								.then(p => setProjects(p))
+								.catch(e => {
+									console.error(e);
+								});
 						}}
 						onError={() => alert('Failed to create project')}
 					/>
@@ -47,7 +44,7 @@ export const Projects = () => {
 			<h2>Recent Projects</h2>
 			<div className={styles.cardContainer}>
 				<div className={styles.cards}>
-					{p.map(p => (
+					{projects.map(p => (
 						<ProjectCard
 							key={p.id}
 							title={p.name}

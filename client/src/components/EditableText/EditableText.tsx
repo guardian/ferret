@@ -1,4 +1,4 @@
-import React, { useState, FC, useRef, FocusEventHandler } from 'react';
+import React, { FC, useState } from 'react';
 import styles from './EditableText.module.css';
 
 type EditableTextProps = {

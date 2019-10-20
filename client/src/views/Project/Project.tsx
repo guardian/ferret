@@ -1,15 +1,7 @@
+import { CenteredPage } from '@guardian/threads';
 import React from 'react';
-import {
-	CenteredPage,
-	PageWithSidebar,
-	Menu,
-	MenuItem,
-	MenuTitle,
-} from '@guardian/threads';
-import { ProjectCard } from '../../components/ProjectCard/ProjectCard';
-
-import styles from './Project.module.css';
 import { ControlBox } from '../../components/ControlBox/ControlBox';
+import { ProjectCard } from '../../components/ProjectCard/ProjectCard';
 
 export const Project = () => {
 	return (

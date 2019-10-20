@@ -1,9 +1,13 @@
-export const getProjects = () => {
-	return fetch('/api/projects').then(res => res.json());
+import { authFetch } from './authFetch';
+
+export const getProjects = async () => {
+	const res = await authFetch('/api/projects');
+
+	return await res.json();
 };
 
 export const createProject = (name: string, image: string) => {
-	return fetch('/api/projects', {
+	return authFetch('/api/projects', {
 		method: 'POST',
 		headers: new Headers({ 'Content-Type': 'application/json' }),
 		body: JSON.stringify({

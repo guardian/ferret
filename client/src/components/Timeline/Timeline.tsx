@@ -1,4 +1,4 @@
-import { Button, SortableList } from '@guardian/threads';
+import { Button } from '@guardian/threads';
 import React, { FC, useState } from 'react';
 import { MdAddCircle } from 'react-icons/md';
 import { EventCard, TimelineEvent } from './EventCard';

@@ -1,12 +1,12 @@
 {
-	"name": "ferret-client",
+	"name": "@guardian/ferret-client",
 	"version": "0.1.0",
 	"private": true,
 	"proxy": "http://localhost:9999",
 	"dependencies": {
+		"@guardian/ferret-common": "file:../common",
 		"@guardian/threads": "^0.21.24",
 		"create-react-context": "^0.3.0",
-		"ferret-common": "file:../common",
 		"history": "^4.10.1",
 		"lodash.debounce": "^4.0.8",
 		"prop-types": "^15.7.2",

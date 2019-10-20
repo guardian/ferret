@@ -1,1 +1,1 @@
-PGPASSWORD=ferret pgcli -h localhost -p 9002 -d ferret -U ferret
+PGPASSWORD=ferret psql -h localhost -p 9002 -d ferret -U ferret

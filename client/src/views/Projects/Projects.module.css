@@ -19,14 +19,3 @@
 	display: flex;
 	justify-content: center;
 }
-
-.toolbar {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: center;
-}
-
-.controls > * {
-	margin-left: var(--sp-base);
-}

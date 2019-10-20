@@ -18,7 +18,7 @@ export const Monitors: FC<MonitorsProps> = ({ match }) => {
 	const pId = match.params.pId;
 
 	useEffect(() => {
-		//listMonitors().then(m => setMonitors(m));
+		listMonitors().then(m => setMonitors(m));
 	}, [pId]);
 
 	return (
@@ -34,7 +34,7 @@ export const Monitors: FC<MonitorsProps> = ({ match }) => {
 					<NewMonitorModal
 						onSuccess={() => {
 							setNewModalOpen(false);
-							//listMonitors().then(m => setMonitors(m));
+							listMonitors().then(m => setMonitors(m));
 						}}
 						onError={() => alert('Failed to create monitor')}
 					/>

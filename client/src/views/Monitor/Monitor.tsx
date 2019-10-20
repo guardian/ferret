@@ -18,11 +18,11 @@ export const Monitor: FC<MonitorProps> = ({ match }) => {
 	const mId = match.params.mId;
 
 	useEffect(() => {
-		//listMonitorTweets(mId).then(m => setTweets(m));
+		listMonitorTweets(mId).then(m => setTweets(m));
 	}, [pId, mId]);
 
 	useEffect(() => {
-		//getMonitor(mId).then(m => setMonitor(m));
+		getMonitor(mId).then(m => setMonitor(m));
 	}, [pId, mId]);
 
 	return (

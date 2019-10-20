@@ -1,6 +1,4 @@
 import { Pool } from 'pg';
-import { Project } from '../../model/Project';
-import uuidv4 from 'uuid';
 import { Tag } from '../../model/Tag';
 
 export class TagQueries {
