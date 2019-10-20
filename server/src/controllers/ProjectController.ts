@@ -15,8 +15,8 @@ export class ProjectsController {
 	listProjects = (req: Request, res: Response) => {
 		this.db.projectQueries
 			.listProjects()
-			.then(monitors => {
-				res.json(monitors);
+			.then(projects => {
+				res.json(projects);
 			})
 			.catch(err => handleFailure(res, err, 'Failed to list projects'));
 	};
@@ -42,4 +42,13 @@ export class ProjectsController {
 				.catch(err => handleFailure(res, err, 'Failed to insert project'));
 		},
 	];
+
+	listTimelines = (req: Request, res: Response) => {
+		this.db.projectQueries
+			.listTimelines()
+			.then(timelines => {
+				res.json(timelines);
+			})
+			.catch(err => handleFailure(res, err, 'Failed to list timelines'));
+	};
 }

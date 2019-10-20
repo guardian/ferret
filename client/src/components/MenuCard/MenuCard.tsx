@@ -29,7 +29,7 @@ export const MenuCard: FC<ProjectCardProps> = ({
 	return (
 		<button
 			disabled={disabled}
-			className={styles.projectCard}
+			className={styles.card}
 			style={mixedStyle}
 			onClick={onClick}
 		>

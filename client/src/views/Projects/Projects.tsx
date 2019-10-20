@@ -21,6 +21,7 @@ export const Projects = () => {
 
 	return (
 		<CenteredPage>
+			<h1>Projects</h1>
 			<ControlBox>
 				<WithModal
 					proxy={() => (

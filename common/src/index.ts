@@ -1,4 +1,5 @@
 export { Monitor } from './model/Monitor';
+export { JobStatus, JobType, MonitorJob } from './model/MonitorJob';
 export { Project } from './model/Project';
-export { MonitorJob, JobStatus, JobType } from './model/MonitorJob';
-export { User, Permission } from './model/User';
+export { Timeline } from './model/Timeline';
+export { Permission, User } from './model/User';

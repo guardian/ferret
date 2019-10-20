@@ -34,7 +34,7 @@ CREATE TABLE projects (
     name       TEXT NOT NULL,
     image      TEXT NOT NULL,
     created_by TEXT REFERENCES users(id) ON DELETE RESTRICT NOT NULL,
-    created_on TIMESTAMPTZ NOT NULL
+    created_on TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE TYPE USER_ACCESS_LEVEL AS ENUM ('read', 'write', 'admin');
@@ -45,6 +45,38 @@ CREATE TABLE user_projects (
     access_level USER_ACCESS_LEVEL NOT NULL,
     PRIMARY KEY (user_id, project_id)
 );
+
+---------------
+-- Timelines --
+---------------
+
+CREATE TABLE timelines (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    created_by TEXT REFERENCES users(id),
+    created_on TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE timeline_events (
+    id           TEXT PRIMARY KEY,
+    timeline_id  TEXT REFERENCES timelines(id) ON DELETE CASCADE NOT NULL,
+    beginning_on TIMESTAMPTZ NOT NULL,
+    ending_on    TIMESTAMPTZ,
+    title        TEXT NOT NULL,
+    description  TEXT NOT NULL
+);
+
+CREATE INDEX ON timeline_events(timeline_id);
+
+CREATE TYPE USER_ACCESS_LEVEL AS ENUM ('grid_image', 'tweet');
+
+CREATE TABLE timeline_events_evidence (
+    event_id TEXT REFERENCES timeline_events(id) ON CASCADE DELETE NOT NULL,
+    type     EVIDENCE_TYPE NOT NULL,
+    data     JSONB NOT NULL    
+);
+
+CREATE INDEX ON timeline_events_evidence(event_id)
 
 --------------
 -- Monitors --

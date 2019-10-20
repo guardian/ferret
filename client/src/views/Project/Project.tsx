@@ -20,16 +20,6 @@ export const Project: FC<ProjectProps> = ({ match }) => {
 				<h1>{project.name}</h1>
 				<ControlBox>
 					<MenuCard title="New Timeline" backgroundImage="/images/plus.png" />
-					<MenuCard
-						disabled
-						title="New Workspace"
-						backgroundImage="/images/plus.png"
-					/>
-					<MenuCard
-						disabled
-						title="New Note"
-						backgroundImage="/images/plus.png"
-					/>
 				</ControlBox>
 			</CenteredPage>
 		);

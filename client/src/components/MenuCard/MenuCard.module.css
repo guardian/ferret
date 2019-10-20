@@ -1,4 +1,4 @@
-.projectCard {
+.card {
 	border: 1px solid var(--color-border);
 	box-shadow: var(--sh-normal);
 	border-radius: var(--radius-default);
@@ -11,15 +11,15 @@
 	text-align: unset;
 }
 
-.projectCard:disabled {
+.card:disabled {
 	filter: grayscale(1);
 }
 
-.projectCard:not(:disabled) {
+.card:not(:disabled) {
 	cursor: pointer;
 }
 
-.projectCard:before {
+.card:before {
 	transition: background-color 0.3s;
 	position: absolute;
 	top: 0;
@@ -33,7 +33,7 @@
 	opacity: 0.5;
 }
 
-.projectCard:hover:not(:disabled):before {
+.card:hover:not(:disabled):before {
 	background-color: var(--color-selected);
 }
 
@@ -52,7 +52,7 @@
 	font-size: var(--fs-massive);
 }
 
-.projectCard:hover:not(:disabled) > .arrow {
+.card:hover:not(:disabled) > .arrow {
 	transform: translateX(0);
 	opacity: 1;
 }

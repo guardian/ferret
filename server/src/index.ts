@@ -43,6 +43,13 @@ async function main() {
 	initLocalAuth(db, config);
 
 	const requireAuth = passport.authenticate('jwt', { session: false });
+	const projectPermissionsCheck = (
+		req: Request,
+		res: Response,
+		next: Function
+	) => {
+		next();
+	};
 
 	app.post(
 		'/api/login',
@@ -73,6 +80,24 @@ async function main() {
 	// Projects
 	app.get('/api/projects', requireAuth, projects.listProjects);
 	app.post('/api/projects', requireAuth, ...projects.insertProject);
+	app.get(
+		'/api/projects/:pId/timelines',
+		requireAuth,
+		projectPermissionsCheck,
+		projects.getTimelines
+	);
+	app.post(
+		'/api/projects/:pId/timelines',
+		requireAuth,
+		projectPermissionsCheck,
+		...projects.insertTimelines
+	);
+	app.get(
+		'/api/projects/:pId/timelines/:tId/evidence',
+		requireAuth,
+		projectPermissionsCheck,
+		projects.getTimelineEvidence
+	);
 
 	// Monitors
 	app.get('/api/monitors', requireAuth, monitors.listMonitors);

@@ -6,7 +6,6 @@ export const authFetch = async (url: string, init?: RequestInit) => {
 	// todo if no token just bail now
 	const request = new Request(url, init);
 
-	console.log(token);
 	request.headers.set('Authorization', 'Bearer ' + token);
 
 	const authRequest = new Request(request, {
