@@ -1,13 +1,13 @@
 import path from 'path';
 import { promises as fs } from 'fs';
 import Twitter from 'twitter';
-import { Database } from './Database';
 import { getConfig } from './Config';
 import { download } from './download';
 import { uploadObject, uploadFile } from './S3';
 import os from 'os';
 import { extractMedia } from './extractMedia';
-import { processTweets } from './twitter';
+import { processTweets } from './Twitter';
+import { Ferret } from './FerretApi';
 
 const config = getConfig();
 
@@ -18,17 +18,27 @@ const client = new Twitter({
 	access_token_secret: config.twitter.accessTokenSecret,
 });
 
-const database = new Database(config);
+//const database = new Database(config);
+const ferret = new Ferret('http://localhost:9999');
 
-const getTweets = (mId: string, query: string, sinceId: number) => {
-	const now = Date.now();
-	processTweets(client, mId, query, sinceId);
+const getTweets = (
+	pId: string,
+	mId: string,
+	query: string,
+	sinceId?: string
+) => {
+	// Todo extract form job queue
 
-	database.updateMonitor(mId, sinceId);
+	processTweets(ferret, client, pId, mId, query, sinceId);
+
+	//database.updateMonitor(mId, sinceId);
 	// do search
 	// write results
 	// update monitor row with new "now time"
 };
 
-console.log(config.twitter);
-getTweets('test', '#TwitterKurds', new Date().setFullYear(2018));
+getTweets(
+	'83bbc735-af43-40d9-88fc-68db03c20ea8',
+	'84b7eaa1-8941-4da9-b562-7093bc28da0f',
+	'#TwitterKurds'
+);

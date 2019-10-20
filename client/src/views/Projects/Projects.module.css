@@ -1,14 +1,32 @@
+.cardContainer {
+	width: 100%;
+	margin: auto;
+}
+
+.cards {
+	min-width: 600px;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+.cards > * {
+	margin: var(--sp-base);
+}
+
 .previewCard {
 	width: 100%;
 	display: flex;
 	justify-content: center;
 }
 
-.cardContainer {
+.toolbar {
 	display: flex;
 	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
 }
 
-.cardContainer > * {
-	margin: var(--sp-base);
+.controls > * {
+	margin-left: var(--sp-base);
 }

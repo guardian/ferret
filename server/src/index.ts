@@ -7,7 +7,8 @@ import { Database } from './services/Database';
 //import { Storage } from './services/storage';
 import { MonitorsController } from './controllers/MonitorController';
 import { ProjectsController } from './controllers/ProjectController';
-import { TagController } from './controllers/TagController';
+import { TagsController } from './controllers/TagsController';
+import { JobsController } from './controllers/JobsController';
 
 async function main() {
 	// Services
@@ -23,27 +24,37 @@ async function main() {
 	const users = new UsersController(db);
 	const monitors = new MonitorsController(db);
 	const projects = new ProjectsController(db);
-	const tags = new TagController(db);
+	const tags = new TagsController(db);
+	const jobs = new JobsController(db);
 
 	// Routes
 	const port = 9999;
 	const app = express();
 	app.use(bodyParser.json());
 
+	// Users
 	app.get('/api/users', users.listUsers);
 	app.get('/api/users/:username', users.getUser);
 	app.post('/api/users', ...users.insertUser);
 
+	// Tags
 	app.get('/api/tags', tags.listTags);
 	app.post('/api/tags', ...tags.insertTag);
 
+	// Projects
 	app.get('/api/projects', projects.listProjects);
 	app.post('/api/projects', ...projects.insertProject);
 
-	app.get('/api/projects/:pId/monitors', monitors.listMonitors);
-	app.get('/api/projects/:pId/monitors/:mId', monitors.getMonitor);
-	app.post('/api/projects/:pId/monitors', ...monitors.insertMonitor);
-	app.put('/api/projects/:pId/monitors/:mId', ...monitors.updateMonitor);
+	// Monitors
+	app.get('/api/monitors', monitors.listMonitors);
+	app.get('/api/monitors/:mId', monitors.getMonitor);
+	app.post('/api/monitors', ...monitors.insertMonitor);
+	app.put('/api/monitors/:mId', ...monitors.updateMonitor);
+	app.get('/api/monitors/:mId/tweets', monitors.getMonitorTweets);
+	app.post('/api//monitors/:mId/tweets', monitors.insertTweetForMonitor);
+
+	// Jobs
+	app.get('/api/jobs', jobs.listJobs);
 
 	app.get('/api/management/healthcheck', (req: Request, res: Response) =>
 		res.send('OK')
@@ -51,11 +62,10 @@ async function main() {
 
 	// Launch! 🚀
 	app.listen(port, () => {
-		console.log(`✨ osmon listening on ${ip.address()}:${port} ✨`);
+		console.log(`✨ ferret listening on ${ip.address()}:${port} ✨`);
 	});
 }
 
 if (require.main === module) {
-	console.log('starting..');
 	main();
 }

@@ -1,4 +1,4 @@
-# OSMON
+# ferret
 
 > A tool for open source monitoring.
 

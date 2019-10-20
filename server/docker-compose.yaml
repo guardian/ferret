@@ -3,10 +3,10 @@ version: "3"
 services:
   minio:
     image: minio/minio
-    container_name: osmon-minio
+    container_name: ferret-minio
     environment:
-      MINIO_ACCESS_KEY: osmon
-      MINIO_SECRET_KEY: osmon
+      MINIO_ACCESS_KEY: ferret
+      MINIO_SECRET_KEY: ferret
     volumes:
       - minio-data:/export
     ports:
@@ -16,13 +16,13 @@ services:
 
   postgres:
     image: postgres:10.5-alpine
-    container_name: osmon-postgres
+    container_name: ferret-postgres
     ports:
       - 9002:5432
     environment:
-      - POSTGRES_USER=osmon
-      - POSTGRES_PASSWORD=osmon
-      - POSTGRES_DB=osmon
+      - POSTGRES_USER=ferret
+      - POSTGRES_PASSWORD=ferret
+      - POSTGRES_DB=ferret
     volumes:
       - postgres-data:/var/lib/postgresql/data
 

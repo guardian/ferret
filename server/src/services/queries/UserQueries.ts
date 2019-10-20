@@ -48,4 +48,14 @@ export class UserQueries {
 
 		return;
 	};
+
+	updateSetting = async (userId: string, settings: object): Promise<void> => {
+		// TODO prove the current user is the same as userId
+		await this.pool.query({
+			text: 'UPDATE users SET settings = settings || $1 WHERE id = $2',
+			values: [settings, userId],
+		});
+
+		return;
+	};
 }

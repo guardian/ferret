@@ -4,7 +4,7 @@ import { handleFailure } from './helpers';
 import { insertTagFormValidators } from '../model/forms/InsertTagForm';
 import { validationResult } from 'express-validator';
 
-export class TagController {
+export class TagsController {
 	db: Database;
 
 	constructor(db: Database) {

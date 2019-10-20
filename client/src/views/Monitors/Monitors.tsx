@@ -1,9 +1,12 @@
 import React, { FC, useState, useEffect } from 'react';
 import { CenteredPage, Table, Button, WithModal } from '@guardian/threads';
 import { NewMonitorModal } from './NewMonitorModal';
-import { Monitor } from '../../model/Monitor';
+import { Monitor } from 'ferret-common';
 import { listMonitors } from '../../services/monitors';
 import { match } from 'react-router';
+import { Link } from 'react-router-dom';
+
+import styles from './Monitors.module.css';
 
 type MonitorsProps = {
 	match: match<{ pId: string }>;
@@ -15,30 +18,28 @@ export const Monitors: FC<MonitorsProps> = ({ match }) => {
 	const pId = match.params.pId;
 
 	useEffect(() => {
-		listMonitors(pId).then(m => setMonitors(m));
+		//listMonitors().then(m => setMonitors(m));
 	}, [pId]);
 
 	return (
 		<CenteredPage>
-			<h1>Controls</h1>
-			<WithModal
-				isOpen={newModalOpen}
-				setIsOpen={setNewModalOpen}
-				proxy={() => <Button>New Monitor</Button>}
-			>
-				<NewMonitorModal
-					pId={pId}
-					onSuccess={() => {
-						setNewModalOpen(false);
-						listMonitors(pId).then(m => setMonitors(m));
-					}}
-					onError={() => alert('Failed to create monitor')}
-				/>
-			</WithModal>
 			<h1>Monitors</h1>
-			<p>
+			<div className={styles.controls}>
 				<input type="text" placeholder="Filter..." />
-			</p>
+				<WithModal
+					isOpen={newModalOpen}
+					setIsOpen={setNewModalOpen}
+					proxy={() => <Button>New Monitor</Button>}
+				>
+					<NewMonitorModal
+						onSuccess={() => {
+							setNewModalOpen(false);
+							//listMonitors().then(m => setMonitors(m));
+						}}
+						onError={() => alert('Failed to create monitor')}
+					/>
+				</WithModal>
+			</div>
 
 			<Table style={{ width: '100%' }}>
 				<thead>
@@ -53,7 +54,9 @@ export const Monitors: FC<MonitorsProps> = ({ match }) => {
 					{monitors.map(m => {
 						return (
 							<tr>
-								<td>{m.name}</td>
+								<td>
+									<Link to={`/monitors/${m.id}`}>{m.name}</Link>
+								</td>
 								<td>{m.query}</td>
 								<td>{new Date().toLocaleString()}</td>
 								<td>{Math.floor(Math.random() * 1000)}</td>

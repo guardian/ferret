@@ -1,0 +1,28 @@
+.cardEvidence {
+	border-top: 1px solid var(--color-border);
+	padding: var(--sp-base);
+}
+
+.cardEvidenceItems {
+	list-style-type: none;
+	padding: var(--sp-base);
+	display: flex;
+	flex-direction: row;
+}
+
+.cardEvidenceItem {
+	border-radius: var(--radius-default);
+	border: 1px solid var(--color-border);
+	padding: var(--sp-base);
+	height: 100px;
+	width: 100px;
+}
+
+.cardEvidenceItemPlaceholder {
+	composes: cardEvidenceItem;
+	background: var(--color-secondary);
+	border: dashed var(--sp-small) var(--color-border);
+	text-align: center;
+	vertical-align: middle;
+	line-height: 100px;
+}

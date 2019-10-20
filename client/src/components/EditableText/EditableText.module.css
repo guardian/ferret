@@ -1,0 +1,38 @@
+.editableText:hover {
+	box-shadow: 0 0 0 2px var(--color-primary-light);
+}
+
+.editableText[data-multiline] {
+	margin: var(--sp-base);
+	height: 5em;
+}
+
+.editableText > textarea {
+	resize: none;
+	width: 100%;
+	height: 5em;
+	box-sizing: border-box;
+}
+
+.editableText > input {
+	width: 100%;
+}
+
+.previewText {
+	display: inline-block;
+	white-space: pre;
+	font-size: var(--fs-input);
+	cursor: text;
+}
+
+.editableText > .previewText {
+	margin: calc(var(--sp-small) + 1px);
+}
+
+.editableText[data-multiline] > .previewText {
+	height: 5em;
+}
+
+.input {
+	display: inline;
+}

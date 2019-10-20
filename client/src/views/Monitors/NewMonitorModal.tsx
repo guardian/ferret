@@ -5,13 +5,11 @@ import { createMonitor } from '../../services/monitors';
 import styles from './NewMonitorModal.module.css';
 
 type NewMonitorModalProps = {
-	pId: string;
 	onSuccess: () => void;
 	onError: () => void;
 };
 
 export const NewMonitorModal: FC<NewMonitorModalProps> = ({
-	pId,
 	onSuccess,
 	onError,
 }) => {
@@ -22,9 +20,9 @@ export const NewMonitorModal: FC<NewMonitorModalProps> = ({
 		<Panel title="Add Monitor">
 			<Form
 				onSubmit={() => {
-					createMonitor(pId, newName, newQuery)
-						.then(onSuccess)
-						.catch(onError);
+					// createMonitor(newName, newQuery)
+					// 	.then(onSuccess)
+					// 	.catch(onError);
 				}}
 			>
 				<FormRow title="Name">

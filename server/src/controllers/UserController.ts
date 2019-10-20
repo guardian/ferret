@@ -47,4 +47,24 @@ export class UsersController {
 				.catch(err => handleFailure(res, err, 'Failed to insert user'));
 		},
 	];
+
+	updateSetting = [
+		async (req: Request, res: Response) => {
+			const errors = validationResult(req);
+
+			if (!errors.isEmpty()) {
+				return res.status(422).json({
+					message: 'Failed to create settings',
+					errors: errors.array(),
+				});
+			}
+
+			const { username, displayName, password } = req.body;
+
+			this.db.userQueries
+				.insertUser(username, displayName, password)
+				.then(() => res.status(201).send())
+				.catch(err => handleFailure(res, err, 'Failed to insert user'));
+		},)
+	]
 }

@@ -1,16 +1,17 @@
 {
-	"name": "osmon-worker",
+	"name": "ferret-worker",
 	"version": "1.0.0",
 	"main": "index.js",
 	"license": "MIT",
 	"scripts": {
-		"start": "CONFIG_PATH=~/osmon-conf ts-node src/index.ts"
+		"start": "CONFIG_PATH=~/ferret-conf ts-node src/index.ts"
 	},
 	"dependencies": {
 		"aws-s3-async": "^1.0.4",
 		"aws-sdk": "^2.545.0",
 		"axios": "^0.19.0",
 		"node-fetch": "^2.6.0",
+		"ferret-common": "file:../common",
 		"pg": "^7.12.1",
 		"twitter": "^1.7.1"
 	},

@@ -22,10 +22,34 @@ export class MonitorsController {
 	};
 
 	getMonitor = (req: Request, res: Response) => {
+		console.log(req.params);
 		this.db.monitorQueries
 			.getMonitor(req.params.mId)
 			.then(monitor => res.json(monitor))
 			.catch(err => handleFailure(res, err, 'Failed to get monitor'));
+	};
+
+	getMonitorTweets = (req: Request, res: Response) => {
+		this.db.monitorQueries
+			.getMonitorTweets(req.params.mId)
+			.then(tweets => res.json(tweets))
+			.catch(err => handleFailure(res, err, 'Failed to get monitor tweets'));
+	};
+
+	insertTweetForMonitor = async (req: Request, res: Response) => {
+		const errors = validationResult(req);
+
+		if (!errors.isEmpty()) {
+			return res.status(422).json({
+				message: 'Invalid add tweet to monitor request',
+				errors: errors.array(),
+			});
+		}
+
+		this.db.monitorQueries
+			.insertTweetForMonitor(req.params.mId, req.body)
+			.then(() => res.status(201).send())
+			.catch(err => handleFailure(res, err, 'Failed to add tweet to monitor'));
 	};
 
 	insertMonitor = [

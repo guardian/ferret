@@ -25,17 +25,17 @@ export const getConfig = () => {
 
 	return {
 		twitter: {
-			consumerKey: required(config, 'osmon_twitter_consumer_key'),
-			consumerSecret: required(config, 'osmon_twitter_consumer_secret'),
-			accessTokenKey: required(config, 'osmon_twitter_access_token_key'),
-			accessTokenSecret: required(config, 'osmon_twitter_access_token_secret'),
+			consumerKey: required(config, 'twitter_consumer_key'),
+			consumerSecret: required(config, 'twitter_consumer_secret'),
+			accessTokenKey: required(config, 'twitter_access_token_key'),
+			accessTokenSecret: required(config, 'twitter_access_token_secret'),
 		},
 		database: {
-			host: required(config, 'osmon_db_host'),
-			port: Number(required(config, 'osmon_db_port')),
-			database: required(config, 'osmon_db_database'),
-			user: required(config, 'osmon_db_user'),
-			password: required(config, 'osmon_db_password'),
+			host: required(config, 'db_host'),
+			port: Number(required(config, 'db_port')),
+			database: required(config, 'db_database'),
+			user: required(config, 'db_user'),
+			password: required(config, 'db_password'),
 		},
 	};
 };

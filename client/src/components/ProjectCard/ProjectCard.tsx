@@ -1,38 +1,52 @@
-import React, { FC, ReactNode } from 'react';
+import React, { FC, ReactNode, CSSProperties } from 'react';
 
 import styles from './ProjectCard.module.css';
+import { MdArrowForward } from 'react-icons/md';
 
 type ProjectCardProps = {
 	title: string;
-	backgroundImage: string;
-	onClick: () => void;
-	control?: ReactNode;
-	controlOnRight?: boolean;
+	backgroundColor?: string;
+	backgroundImage?: string;
+	onClick?: () => void;
+	leftControl?: ReactNode;
+	rightControl?: ReactNode;
+	style?: CSSProperties;
+	disabled?: boolean;
 };
 
 export const ProjectCard: FC<ProjectCardProps> = ({
 	title,
 	onClick,
+	backgroundColor,
 	backgroundImage,
-	control,
-	controlOnRight,
+	leftControl,
+	rightControl,
+	style,
+	disabled,
 }) => {
+	const mixedStyle = { ...style, backgroundColor };
+
 	return (
-		<div className={styles.projectCard}>
-			{!!control && (
-				<div
-					data-right={controlOnRight ? true : null}
-					className={styles.control}
-				>
-					{control}
-				</div>
+		<button
+			disabled={disabled}
+			className={styles.projectCard}
+			style={mixedStyle}
+		>
+			{!!rightControl && (
+				<div className={styles.rightControl}>{rightControl}</div>
 			)}
-			<div
-				onClick={onClick}
-				className={styles.image}
-				style={{ backgroundImage: `url(${backgroundImage})` }}
-			/>
+			{!!leftControl && <div className={styles.leftControl}>{leftControl}</div>}
+			{backgroundImage && (
+				<div
+					onClick={onClick}
+					className={styles.image}
+					style={{ backgroundImage: `url(${backgroundImage})` }}
+				/>
+			)}
 			<span className={styles.text}>{title}</span>
-		</div>
+			<div className={styles.arrow}>
+				<MdArrowForward />
+			</div>
+		</button>
 	);
 };

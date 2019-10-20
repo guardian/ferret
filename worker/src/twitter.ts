@@ -5,67 +5,114 @@ import { promises as fs } from 'fs';
 import { uploadObject, uploadFile } from './S3';
 import { extractMedia } from './extractMedia';
 import { download } from './download';
+import { Ferret } from './FerretApi';
 
-export const processTweets = (
+const search = (
 	client: Twitter,
-	mId: string,
 	query: string,
+	sinceId?: string,
 	maxId?: string
+): Promise<any> => {
+	return new Promise((resolve, reject) => {
+		client.get(
+			'search/tweets',
+			{
+				q: query,
+				count: 100,
+				include_entities: true,
+				max_id: maxId,
+				since_id: sinceId,
+			},
+			(err, data) => {
+				if (err) {
+					reject(err);
+				} else {
+					resolve(data);
+				}
+			}
+		);
+	});
+};
+const saveStatuses = async (
+	statuses: any[],
+	ferret: Ferret,
+	pId: string,
+	mId: string
 ) => {
-	client.get(
-		'search/tweets',
-		{ q: query, count: 100, include_entities: true, maxId },
-		(err, tweets) => {
-			if (err) {
-				console.error(`Failed to get tweets for ${mId}`, err);
-			} else {
-				console.log(tweets);
-				return;
-				const { statuses } = tweets;
-				statuses.forEach(async (status: any) => {
-					const { extended_entities } = status;
-					// write tweet to s3 bucket
-					const { id_str } = status;
+	const toCleanUp = [];
+	for (let i = 0; i < statuses.length; i++) {
+		const status = statuses[i];
 
-					console.log(`Processign status: ${id_str}`);
-					const tweetPath = `${mId}/${id_str}/`;
-					const statusPath = tweetPath + 'status.json';
+		const { id_str, extended_entities } = status;
 
-					try {
-						console.log('uploading text');
-						await uploadObject(status, 'osmon-temp', statusPath);
-					} catch (err) {
-						console.error('Failed to upload status to s3', err);
-					}
+		const tweetPath = `${mId}/${id_str}/`;
+		const statusPath = tweetPath + 'status.json';
+		//await ferret.insertTweet(pId, mId, status);
 
-					if (extended_entities && extended_entities.media) {
-						const mediaObjects = extractMedia(extended_entities.media);
+		try {
+			await uploadObject(status, 'ferret-temp', statusPath);
+		} catch (err) {
+			console.error('Failed to upload status to s3', err);
+		}
 
-						for (let i = 0; i < mediaObjects.length; i++) {
-							const fileName = mediaObjects[i].name;
-							const filePath = path.resolve(os.tmpdir(), fileName);
+		if (extended_entities && extended_entities.media) {
+			const mediaObjects = extractMedia(extended_entities.media);
 
-							console.log('downloading file');
-							await download(mediaObjects[i].url, filePath);
+			for (let i = 0; i < mediaObjects.length; i++) {
+				const fileName = mediaObjects[i].name;
+				const filePath = path.resolve(os.tmpdir(), fileName);
 
-							try {
-								console.log('upload file');
-								await uploadFile(
-									filePath,
-									mediaObjects[i].contentType,
-									'osmon-temp',
-									tweetPath + mediaObjects[i].name
-								);
-							} catch (err) {
-								console.error('failed to upload file to s3', err);
-							} finally {
-								await fs.unlink(filePath);
-							}
-						}
-					}
-				});
-				// Recurse!
+				await download(mediaObjects[i].url, filePath);
+				toCleanUp.push(filePath);
+
+				try {
+					await uploadFile(
+						filePath,
+						mediaObjects[i].contentType,
+						'ferret-temp',
+						tweetPath + mediaObjects[i].name
+					);
+				} catch (err) {
+					console.error('failed to upload file to s3', err);
+				}
 			}
 		}
-	);
+	}
+	// cleanup
+};
+export const processTweets = async (
+	ferret: Ferret,
+	client: Twitter,
+	pId: string,
+	mId: string,
+	query: string,
+	sinceId?: string
+) => {
+	const updatedAt = new Date();
+
+	let i = 0;
+	console.log(`getting page ${++i}`);
+	let tweets = await search(client, query, sinceId);
+
+	// On the first request we store the max_id so we can use that as the since ID next time
+	const nextSinceId = tweets.search_metadata.max_id_str;
+	saveStatuses(tweets.statuses, ferret, pId, mId);
+
+	return;
+	// while (tweets.search_metadata.next_results) {
+	// 	console.log(`getting page ${++i}`);
+	// 	// extract new maxId from next_results
+	// 	const maxIdMatch = /max_id=(\d.*)/.exec(
+	// 		tweets.search_metadata.next_results
+	// 	);
+	// 	if (maxIdMatch && maxIdMatch[1]) {
+	// 		tweets = await search(client, query, sinceId, maxIdMatch[1]);
+	// 		saveStatuses(tweets.statuses, mId);
+	// 	} else {
+	// 		break;
+	// 	}
+	// }
+
+	// ferret.updateMonitor(pId, mId, nextSinceId, updatedAt);
+	// update monitor
 };

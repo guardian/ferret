@@ -5,6 +5,7 @@ import { MonitorQueries } from './queries/MonitorQueries';
 import { Config } from './Config';
 import { ProjectQueries } from './queries/projectQueries';
 import { TagQueries } from './queries/TagQueries';
+//import { JobQueries } from './queries/JobQueries';
 
 export class Database {
 	private host: string;
@@ -20,6 +21,7 @@ export class Database {
 	public monitorQueries: MonitorQueries;
 	public projectQueries: ProjectQueries;
 	public tagQueries: TagQueries;
+	//public jobQueries: JobQueries;
 
 	constructor(config: Config) {
 		const { host, port, database, user, password } = config.database;
@@ -41,6 +43,7 @@ export class Database {
 		this.monitorQueries = new MonitorQueries(this.pool);
 		this.projectQueries = new ProjectQueries(this.pool);
 		this.tagQueries = new TagQueries(this.pool);
+		//		this.jobQueries = new JobQueries(this.pool);
 	}
 
 	connect = () => this.pool.connect();
