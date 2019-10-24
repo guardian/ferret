@@ -59,7 +59,7 @@ const saveStatuses = async (
 			const mediaObjects = extractMedia(extended_entities.media);
 
 			for (let i = 0; i < mediaObjects.length; i++) {
-				const fileName = mediaObjects[i].name;
+				const fileName = mediaObjects[i].title;
 				const filePath = path.resolve(os.tmpdir(), fileName);
 
 				await download(mediaObjects[i].url, filePath);
@@ -70,7 +70,7 @@ const saveStatuses = async (
 						filePath,
 						mediaObjects[i].contentType,
 						'ferret-temp',
-						tweetPath + mediaObjects[i].name
+						tweetPath + mediaObjects[i].title
 					);
 				} catch (err) {
 					console.error('failed to upload file to s3', err);

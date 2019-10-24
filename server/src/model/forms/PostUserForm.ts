@@ -1,6 +1,6 @@
 import { check } from 'express-validator';
 
-export const insertUserFormValidators = [
+export const postUserFormValidators = [
 	check('username').isAlphanumeric(),
 	check('displayName').isString(),
 	check('password').isString(),

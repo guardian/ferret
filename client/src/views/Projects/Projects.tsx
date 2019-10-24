@@ -47,7 +47,7 @@ export const Projects = () => {
 					{projects.map(p => (
 						<MenuCard
 							key={p.id}
-							title={p.name}
+							title={p.title}
 							onClick={() => history.push(`/projects/${p.id}`)}
 							backgroundImage={p.image}
 						/>

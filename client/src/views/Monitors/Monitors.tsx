@@ -55,7 +55,7 @@ export const Monitors: FC<MonitorsProps> = ({ match }) => {
 						return (
 							<tr>
 								<td>
-									<Link to={`/monitors/${m.id}`}>{m.name}</Link>
+									<Link to={`/monitors/${m.id}`}>{m.title}</Link>
 								</td>
 								<td>{m.query}</td>
 								<td>{new Date().toLocaleString()}</td>

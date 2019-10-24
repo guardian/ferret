@@ -1,6 +1,6 @@
 import { check } from 'express-validator';
 
-export const insertTagFormValidators = [
+export const postTagFormValidators = [
 	check('label').isString(),
 	check('color').isHexColor(),
 ];

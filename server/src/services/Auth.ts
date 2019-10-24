@@ -12,7 +12,7 @@ export const hashPassword = (plainTextPassword: string): Promise<string> => {
 	return bcrypt.hash(plainTextPassword, SALT_ROUNDS);
 };
 
-export const initLocalAuth = (db: Database, config: Config) => {
+export const initAuth = (db: Database, config: Config) => {
 	passport.use(
 		new LocalStrategy(async (username, password, cb) => {
 			try {

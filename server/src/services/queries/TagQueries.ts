@@ -10,7 +10,11 @@ export class TagQueries {
 
 	listTags = async (): Promise<Tag[]> => {
 		const { rows } = await this.pool.query('SELECT id, label, color FROM tags');
-		return rows.map(row => new Tag(row['id'], row['label'], row['color']));
+		return rows.map(row => ({
+			id: row['id'],
+			label: row['label'],
+			color: row['color'],
+		}));
 	};
 
 	insertTag = async (label: string, color: string): Promise<void> => {

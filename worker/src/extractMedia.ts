@@ -3,7 +3,7 @@ type MediaObject = {
 	id: string;
 	url: string;
 	contentType: string;
-	name: string;
+	title: string;
 };
 const lastPartOfUrl = (url: string) => {
 	const bits = url.split('/');
@@ -31,7 +31,7 @@ export const extractMedia = (media: any): MediaObject[] => {
 				kind: media.type,
 				contentType: content_type,
 				url: url,
-				name: lastPartOfUrl(url),
+				title: lastPartOfUrl(url),
 			});
 		} else if (media.type === 'photo') {
 			const { media_url_https } = media;
@@ -40,7 +40,7 @@ export const extractMedia = (media: any): MediaObject[] => {
 				kind: media.type,
 				contentType: 'image/jpeg',
 				url: media_url_https,
-				name: lastPartOfUrl(media_url_https),
+				title: lastPartOfUrl(media_url_https),
 			});
 		} else {
 			console.error(`Unknown media type: ${media.type}`);

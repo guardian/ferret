@@ -1,7 +1,7 @@
 import { Database } from '../services/Database';
 import { Request, Response } from 'express';
-import { handleFailure } from './helpers';
-import { insertTagFormValidators } from '../model/forms/InsertTagForm';
+import { handleFailure, checkLogin } from './helpers';
+import { postTagFormValidators } from '../model/forms/PostTagForm';
 import { validationResult } from 'express-validator';
 
 export class TagsController {
@@ -11,17 +11,21 @@ export class TagsController {
 		this.db = db;
 	}
 
-	listTags = (req: Request, res: Response) => {
-		this.db.tagQueries
-			.listTags()
-			.then(users => {
-				res.json(users);
-			})
-			.catch(err => handleFailure(res, err, 'Failed to list tags'));
-	};
+	listTags = () => [
+		checkLogin,
+		(req: Request, res: Response) => {
+			this.db.tagQueries
+				.listTags()
+				.then(users => {
+					res.json(users);
+				})
+				.catch(err => handleFailure(res, err, 'Failed to list tags'));
+		},
+	];
 
-	insertTag = [
-		insertTagFormValidators,
+	insertTag = () => [
+		checkLogin,
+		postTagFormValidators,
 		async (req: Request, res: Response) => {
 			const errors = validationResult(req);
 

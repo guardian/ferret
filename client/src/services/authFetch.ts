@@ -1,6 +1,8 @@
 let token: string | undefined = undefined;
 
-export const setAuthToken = (newToken: string) => (token = newToken);
+export const setAuthToken = (newToken: string) => {
+	token = newToken;
+};
 
 export const authFetch = async (url: string, init?: RequestInit) => {
 	// todo if no token just bail now
@@ -15,6 +17,7 @@ export const authFetch = async (url: string, init?: RequestInit) => {
 	const res = await fetch(authRequest);
 
 	if (!res.ok) {
+		// TODO clear token out of reducer
 		throw Error('Failed to fetch');
 	}
 

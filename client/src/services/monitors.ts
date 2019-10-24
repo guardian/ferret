@@ -12,12 +12,12 @@ export const listMonitorTweets = (mId: string) => {
 	return authFetch(`/api/monitors/${mId}/tweets`).then(res => res.json());
 };
 
-export const createMonitor = (name: string, query: string) => {
+export const createMonitor = (title: string, query: string) => {
 	return authFetch(`/api/monitors`, {
 		method: 'POST',
 		headers: new Headers({ 'Content-Type': 'application/json' }),
 		body: JSON.stringify({
-			name,
+			title,
 			query,
 		}),
 	});

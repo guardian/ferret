@@ -1,6 +1,5 @@
-export declare class Monitor {
+export declare type Monitor = {
     id: string;
-    name: string;
+    title: string;
     query: string;
-    constructor(id: string, name: string, query: string);
-}
+};

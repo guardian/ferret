@@ -1,8 +1,14 @@
 import { Database } from '../services/Database';
 import { Request, Response } from 'express';
-import { handleFailure } from './helpers';
-import { insertUserFormValidators } from '../model/forms/InsertUserForm';
+import {
+	handleFailure,
+	checkLogin,
+	getUser,
+	checkUserPermissions,
+} from './helpers';
+import { postUserFormValidators } from '../model/forms/PostUserForm';
 import { validationResult } from 'express-validator';
+import { User, Permission } from '@guardian/ferret-common';
 
 export class UsersController {
 	db: Database;
@@ -11,26 +17,32 @@ export class UsersController {
 		this.db = db;
 	}
 
-	listUsers = (req: Request, res: Response) => {
-		this.db.userQueries
-			.listUsers()
-			.then(users => {
-				res.json(users);
-			})
-			.catch(err => handleFailure(res, err, 'Failed to list users'));
-	};
+	listUsers = () => [
+		checkLogin,
+		(req: Request, res: Response) => {
+			this.db.userQueries
+				.listUsers()
+				.then(users => {
+					res.json(users);
+				})
+				.catch(err => handleFailure(res, err, 'Failed to list users'));
+		},
+	];
 
-	getUser = (req: Request, res: Response) => {
-		this.db.userQueries
-			.getUser(req.params.uId)
-			.then(user => res.json(user))
-			.catch(err => handleFailure(res, err, 'Failed to get user'));
-	};
+	getUser = () => [
+		checkLogin,
+		(req: Request, res: Response) => {
+			this.db.userQueries
+				.getUser(req.params.uId)
+				.then(user => res.json(user))
+				.catch(err => handleFailure(res, err, 'Failed to get user'));
+		},
+	];
 
-	login = (req: Request, res: Response) => {};
-
-	insertUser = [
-		insertUserFormValidators,
+	insertUser = () => [
+		checkLogin,
+		checkUserPermissions('manage_users'),
+		postUserFormValidators,
 		async (req: Request, res: Response) => {
 			const errors = validationResult(req);
 
@@ -44,13 +56,14 @@ export class UsersController {
 			const { username, displayName, password } = req.body;
 
 			this.db.userQueries
-				.insertUser(username, displayName, password)
+				.insertUser(username, displayName, password, [])
 				.then(() => res.status(201).send())
 				.catch(err => handleFailure(res, err, 'Failed to insert user'));
 		},
 	];
 
-	patchSetting = [
+	patchSetting = () => [
+		checkLogin,
 		async (req: Request, res: Response) => {
 			const errors = validationResult(req);
 
@@ -63,10 +76,17 @@ export class UsersController {
 
 			const { settings } = req.body;
 
-			this.db.userQueries
-				.updateSetting(req.params.uId, settings)
-				.then(() => res.status(201).send())
-				.catch(err => handleFailure(res, err, 'Failed to insert user'));
+			const user = getUser(req);
+
+			// TODO confirm this actually uses the encrypted part of the JWT
+			if (user.id === req.params.uId) {
+				this.db.userQueries
+					.updateSetting(req.params.uId, settings)
+					.then(() => res.status(201).send())
+					.catch(err => handleFailure(res, err, 'Failed to insert user'));
+			} else {
+				return res.status(403);
+			}
 		},
 	];
 }

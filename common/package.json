@@ -13,6 +13,7 @@
 		"build": "mkdir -p ./dist && tsc && yarn link"
 	},
 	"devDependencies": {
+		"tslib": "^1.10.0",
 		"typescript": "^3.2.4"
 	},
 	"repository": {

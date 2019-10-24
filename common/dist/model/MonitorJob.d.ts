@@ -7,12 +7,10 @@ export declare enum JobStatus {
     Done = "done",
     Failed = "failed"
 }
-export declare class MonitorJob {
+export declare type MonitorJob = {
     monitorId: string;
     jobType: JobType;
     status: JobStatus;
     submittedAt: Date;
     executeAt: Date;
-    constructor(monitorId: string, jobType: JobType, status: JobStatus, submitttedAt: Date, executeAt: Date);
-    priority: () => 10 | 1;
-}
+};

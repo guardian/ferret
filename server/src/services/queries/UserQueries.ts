@@ -1,8 +1,9 @@
-import { hashPassword } from '../LocalAuth';
+import { hashPassword } from '../Auth';
 import { ServerUser } from '../../model/ServerUser';
 import { Pool } from 'pg';
 import uuidv4 from 'uuid';
-import { User } from '@guardian/ferret-common';
+import { User, Permission } from '@guardian/ferret-common';
+import { transactionally } from './helpers';
 
 export class UserQueries {
 	pool: Pool;
@@ -13,18 +14,31 @@ export class UserQueries {
 
 	listUsers = async (): Promise<User[]> => {
 		const { rows } = await this.pool.query(
-			'SELECT id, username, display_name FROM users'
+			`SELECT id, username, display_name, permission
+			 FROM users
+			 JOIN user_permissions ON user_id = id`
 		);
 
-		return rows.map(
-			row => new User(row['id'], row['username'], row['display_name'], [])
-		);
+		return rows.map(row => {
+			const permissions = rows
+				.filter(r => r.id === row.id)
+				.map(r => r.permission);
+
+			return {
+				id: row['id'],
+				username: row['username'],
+				displayName: row['display_name'],
+				permissions,
+			};
+		});
 	};
 
 	getUser = async (id: string): Promise<ServerUser> => {
 		const { rows } = await this.pool.query({
-			text:
-				'SELECT id, username, display_name, password FROM users WHERE id = $1',
+			text: `SELECT id, username, display_name, password 
+					FROM users 
+					LEFT JOIN user_permissions ON user_id = $1
+					WHERE id = $1`,
 			values: [id],
 		});
 
@@ -33,7 +47,7 @@ export class UserQueries {
 			rows[0]['username'],
 			rows[0]['display_name'],
 			rows[0]['password'],
-			[]
+			rows.map(r => r.permission)
 		);
 	};
 
@@ -41,8 +55,10 @@ export class UserQueries {
 		username: string
 	): Promise<ServerUser | undefined> => {
 		const { rows } = await this.pool.query({
-			text:
-				'SELECT id, username, display_name, password FROM users WHERE username = $1',
+			text: `SELECT id, username, display_name, password, permission
+				 FROM users 
+				 LEFT JOIN user_permissions ON user_id = id
+				 WHERE username = $1`,
 			values: [username],
 		});
 
@@ -52,7 +68,7 @@ export class UserQueries {
 				rows[0]['username'],
 				rows[0]['display_name'],
 				rows[0]['password'],
-				[]
+				rows.map(r => r.permission)
 			);
 		}
 
@@ -62,14 +78,25 @@ export class UserQueries {
 	insertUser = async (
 		username: string,
 		displayName: string,
-		plainTextPassword: string
+		plainTextPassword: string,
+		initialPermissions: Permission[]
 	): Promise<void> => {
 		const hashedPassword: string = await hashPassword(plainTextPassword);
 
-		await this.pool.query({
-			text:
-				'INSERT INTO users (id, username, display_name, password) VALUES ($1, $2, $3, $4)',
-			values: [uuidv4(), username, displayName, hashedPassword],
+		const id = uuidv4();
+		transactionally(this.pool, async client => {
+			await client.query({
+				text:
+					'INSERT INTO users (id, username, display_name, password) VALUES ($1, $2, $3, $4)',
+				values: [id, username, displayName, hashedPassword],
+			});
+
+			for (let i = 0; i < initialPermissions.length; i++) {
+				await client.query({
+					text: `INSERT INTO user_permissions (user_id, permission) VALUES ($1, $2)`,
+					values: [id, initialPermissions[i]],
+				});
+			}
 		});
 
 		return;

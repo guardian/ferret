@@ -1,34 +1,34 @@
-export class Timeline {
+export type Timeline = {
 	id: string;
-	name: string;
+	title: string;
+	image: string;
 	createdBy: string;
 	createdOn: Date;
+};
 
-	constructor(id: string, name: string, createdBy: string, createdOn: Date) {
-		this.id = id;
-		this.name = name;
-		this.createdBy = createdBy;
-		this.createdOn = createdOn;
-	}
-}
-
-export type TimelineEvent = {
+export type TimelineEntry = {
 	id: string;
-	beginningOn: Date;
-	endingOn: Date;
+	happenedOn: Date;
 	title: string;
 	description: string;
 	evidence: TimelineEvidence[];
 };
 
-export enum EvidenceType {
-	GridImage = 'grid_image',
-	Tweet = 'tweet',
-}
+export type EvidenceType = 'giant_resource' | 'grid_image' | 'tweet' | 'url';
 
 export type TimelineEvidence = {
 	type: EvidenceType;
-	data: GridImageEvidence | TweetEvidence;
+	title: string;
+	data: GridImageEvidence | TweetEvidence | UrlEvidence;
+};
+
+export type GiantResource = {
+	id: string;
+	thumb_url: string;
+};
+
+export type UrlEvidence = {
+	url: string;
 };
 
 // Maybe type these properly, one day...

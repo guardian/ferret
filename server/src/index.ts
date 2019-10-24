@@ -1,5 +1,5 @@
 import bodyParser from 'body-parser';
-import express, { Request, Response, RequestHandler } from 'express';
+import express, { Request, Response } from 'express';
 import ip from 'ip';
 import { UsersController } from './controllers/UserController';
 import { getConfig } from './services/Config';
@@ -9,10 +9,9 @@ import { MonitorsController } from './controllers/MonitorController';
 import { ProjectsController } from './controllers/ProjectController';
 import { TagsController } from './controllers/TagsController';
 import { JobsController } from './controllers/JobsController';
-import { initLocalAuth } from './services/LocalAuth';
-import { ensureLoggedIn } from 'connect-ensure-login';
+import { initAuth } from './services/Auth';
 import passport from 'passport';
-import jwt from 'jsonwebtoken';
+import { AuthController } from './controllers/AuthController';
 
 async function main() {
 	// Services
@@ -27,6 +26,7 @@ async function main() {
 	// TODO GoogleAuth
 
 	// Controllers
+	const auth = new AuthController(db, config);
 	const users = new UsersController(db);
 	const monitors = new MonitorsController(db);
 	const projects = new ProjectsController(db);
@@ -39,80 +39,57 @@ async function main() {
 	app.use(bodyParser.json());
 	app.use(passport.initialize());
 
+	initAuth(db, config);
+
 	// Auth
-	initLocalAuth(db, config);
-
-	const requireAuth = passport.authenticate('jwt', { session: false });
-	const projectPermissionsCheck = (
-		req: Request,
-		res: Response,
-		next: Function
-	) => {
-		next();
-	};
-
-	app.post(
-		'/api/login',
-		passport.authenticate('local', { failureRedirect: '/login' }),
-		(req, res) => {
-			const user = { ...req.session!.passport.user };
-			console.log(user);
-			const token = jwt.sign(user, config.app.secret, {
-				expiresIn: 60 * 60,
-			});
-
-			res.status(200).send({
-				token,
-			});
-		}
-	);
+	app.post('/api/login', ...auth.login());
 
 	// Users
-	app.get('/api/users', requireAuth, users.listUsers);
-	app.get('/api/users/:uId', requireAuth, users.getUser);
-	app.post('/api/users', requireAuth, ...users.insertUser);
-	app.patch('/api/users/:uId/settings', requireAuth, ...users.patchSetting);
+	app.get('/api/users', ...users.listUsers());
+	app.get('/api/users/:uId', ...users.getUser());
+	app.post('/api/users', ...users.insertUser());
+	app.patch('/api/users/:uId/settings', ...users.patchSetting());
 
 	// Tags
-	app.get('/api/tags', requireAuth, tags.listTags);
-	app.post('/api/tags', requireAuth, ...tags.insertTag);
+	app.get('/api/tags', ...tags.listTags());
+	app.post('/api/tags', ...tags.insertTag());
 
 	// Projects
-	app.get('/api/projects', requireAuth, projects.listProjects);
-	app.post('/api/projects', requireAuth, ...projects.insertProject);
+	app.get('/api/projects', ...projects.listProjects());
+	app.post('/api/projects', ...projects.insertProject());
+	app.get('/api/projects/:pId/timelines', ...projects.listTimelines());
+	app.post('/api/projects/:pId/timelines', ...projects.insertTimeline());
 	app.get(
-		'/api/projects/:pId/timelines',
-		requireAuth,
-		projectPermissionsCheck,
-		projects.getTimelines
+		'/api/projects/:pId/timelines/:tId/entries/',
+		...projects.getTimelineEntries()
 	);
 	app.post(
-		'/api/projects/:pId/timelines',
-		requireAuth,
-		projectPermissionsCheck,
-		...projects.insertTimelines
+		'/api/projects/:pId/timelines/:tId/entries/',
+		...projects.postTimelineEntry()
 	);
-	app.get(
-		'/api/projects/:pId/timelines/:tId/evidence',
-		requireAuth,
-		projectPermissionsCheck,
-		projects.getTimelineEvidence
+	app.put(
+		'/api/projects/:pId/timelines/:tId/entries/reorder',
+		...projects.reorderTimelineEntries()
 	);
+	app.put(
+		'/api/projects/:pId/timelines/:tId/entries/:eId',
+		...projects.putTimelineEntry()
+	);
+	//app.get(
+	//	'/api/projects/:pId/timelines/:tId/evidence',
+	//	...projects.getTimelineEvidence
+	//);
 
 	// Monitors
-	app.get('/api/monitors', requireAuth, monitors.listMonitors);
-	app.get('/api/monitors/:mId', requireAuth, monitors.getMonitor);
-	app.post('/api/monitors', requireAuth, ...monitors.insertMonitor);
-	app.put('/api/monitors/:mId', requireAuth, ...monitors.updateMonitor);
-	app.get('/api/monitors/:mId/tweets', requireAuth, monitors.getMonitorTweets);
-	app.post(
-		'/api//monitors/:mId/tweets',
-		requireAuth,
-		monitors.insertTweetForMonitor
-	);
+	app.get('/api/monitors', ...monitors.listMonitors());
+	app.get('/api/monitors/:mId', ...monitors.getMonitor());
+	app.post('/api/monitors', ...monitors.insertMonitor());
+	app.put('/api/monitors/:mId', ...monitors.updateMonitor());
+	app.get('/api/monitors/:mId/tweets', monitors.getMonitorTweets());
+	app.post('/api//monitors/:mId/tweets', ...monitors.insertTweetForMonitor());
 
 	// Jobs
-	app.get('/api/jobs', requireAuth, jobs.listJobs);
+	app.get('/api/jobs', ...jobs.listJobs());
 
 	app.get('/api/management/healthcheck', (req: Request, res: Response) =>
 		res.send('OK')

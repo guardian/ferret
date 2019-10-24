@@ -27,7 +27,7 @@ export const Monitor: FC<MonitorProps> = ({ match }) => {
 
 	return (
 		<CenteredPage>
-			<h1>Monitor {!!monitor && '— ' + monitor.name}</h1>
+			<h1>Monitor {!!monitor && '— ' + monitor.title}</h1>
 			<div className={styles.tweets}>
 				{tweets.map(t => (
 					<Tweet tweet={t} />

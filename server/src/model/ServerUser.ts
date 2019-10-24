@@ -21,7 +21,12 @@ export class ServerUser {
 		this.permissions = permissions;
 	}
 
-	toUser() {
-		return new User(this.id, this.username, this.displayName, this.permissions);
+	toUser(): User {
+		return {
+			id: this.id,
+			username: this.username,
+			displayName: this.displayName,
+			permissions: this.permissions,
+		};
 	}
 }

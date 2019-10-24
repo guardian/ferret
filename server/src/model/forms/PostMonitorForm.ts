@@ -1,6 +1,6 @@
 import { check } from 'express-validator';
 
-export const insertMonitorFormValidators = [
-	check('name').isString(),
+export const postMonitorFormValidators = [
+	check('title').isString(),
 	check('query').isString(),
 ];

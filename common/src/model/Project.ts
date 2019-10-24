@@ -1,11 +1,12 @@
-export class Project {
-	id: string;
-	name: string;
-	image: string;
-
-	constructor(id: string, name: string, image: string) {
-		this.id = id;
-		this.name = name;
-		this.image = image;
-	}
+export const enum ProjectAccessLevel {
+	Read = 'read',
+	Write = 'write',
+	Admin = 'admin',
 }
+
+export type Project = {
+	id: string;
+	title: string;
+	image: string;
+	access: ProjectAccessLevel;
+};

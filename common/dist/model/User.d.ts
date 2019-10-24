@@ -1,13 +1,7 @@
-export declare enum Permission {
-    SystemUser = "system_user",
-    ManageUsers = "manage_users",
-    ManageProjects = "manage_projects",
-    ManageMonitors = "manage_monitors"
-}
-export declare class User {
+export declare type Permission = 'system_user' | 'manage_users' | 'manage_projects' | 'manage_monitors';
+export declare type User = {
     id: string;
     username: string;
     displayName: string;
     permissions: Permission[];
-    constructor(id: string, username: string, displayName: string, permissions: Permission[]);
-}
+};

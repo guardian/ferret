@@ -1,6 +1,1 @@
-DROP TABLE tags;
-DROP TABLE tweets;
-DROP TABLE monitors;
-DROP TABLE projects;
-DROP TABLE users;
-DROP TYPE USER_LEVEL;
+-- Do we even need an undo if we're using transactional DDL?

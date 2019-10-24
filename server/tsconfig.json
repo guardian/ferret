@@ -5,9 +5,6 @@
 		"noEmit": true,
 		"strict": true,
 		"esModuleInterop": true,
-		"moduleResolution": "node",
-		"emitDecoratorMetadata": true,
-		"experimentalDecorators": true,
-		"isolatedModules": true
+		"moduleResolution": "node"
 	}
 }

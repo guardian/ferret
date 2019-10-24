@@ -18,7 +18,6 @@ export class Ferret {
 	//};
 
 	//insertTweet = (pId: string, mId: string, tweet: any) => {
-	//	console.log('insertan tweet ' + tweet.id_str);
 	//	return fetch(`${this.baseUrl}/api/projects/${pId}/monitors/${mId}/tweets`, {
 	//		method: 'POST',
 	//		headers: { 'Content-Type': 'application/json' },

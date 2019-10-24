@@ -13,17 +13,25 @@ export const NewProjectModal: FC<NewProjectModalProps> = ({
 	onSuccess,
 	onError,
 }) => {
+	const [processing, setProcessing] = useState(false);
 	const [newName, setNewName] = useState('');
 	const [newImage, setNewImage] = useState('/kobane.jpeg');
 
 	return (
 		<Panel title="New Project">
 			<Form
-				onSubmit={() =>
+				onSubmit={() => {
+					setProcessing(true);
 					createProject(newName, newImage)
-						.then(onSuccess)
-						.catch(onError)
-				}
+						.then(() => {
+							setProcessing(false);
+							onSuccess();
+						})
+						.catch(() => {
+							setProcessing(false);
+							onError();
+						});
+				}}
 			>
 				<FormRow title="Name">
 					<input
@@ -51,7 +59,11 @@ export const NewProjectModal: FC<NewProjectModalProps> = ({
 					</div>
 				</FormRow>
 				<FormRow horizontal>
-					<Button type="submit" disabled={!newName || !newImage}>
+					<Button
+						type="submit"
+						disabled={!newName || !newImage || processing}
+						showSpinner={processing}
+					>
 						Create
 					</Button>
 				</FormRow>

@@ -1,19 +1,22 @@
 import React, { FC, useState } from 'react';
 import styles from './EditableText.module.css';
 
+type Mode = 'single' | 'multiline' | 'date';
 type EditableTextProps = {
 	text: string;
 	onChange: (text: string) => void;
-	multiline?: boolean;
+	mode?: Mode;
 };
 
 export const EditableText: FC<EditableTextProps> = ({
 	text,
 	onChange,
-	multiline,
+	mode,
 }) => {
 	const [editingBody, setEditingBody] = useState(false);
 	const [editText, setEditText] = useState(text);
+
+	const usedMode = mode ? mode : 'single';
 
 	const startEdit: React.MouseEventHandler = e => {
 		e.stopPropagation();
@@ -34,11 +37,11 @@ export const EditableText: FC<EditableTextProps> = ({
 			setEditingBody(false);
 		}
 
-		if (!multiline && e.keyCode === 13) {
+		if (usedMode !== 'multiline' && e.keyCode === 13) {
 			onSaveEdit();
 		}
 
-		if (multiline && e.metaKey && e.keyCode === 13) {
+		if (usedMode === 'multiline' && e.metaKey && e.keyCode === 13) {
 			onSaveEdit();
 		}
 	};
@@ -48,23 +51,10 @@ export const EditableText: FC<EditableTextProps> = ({
 		setEditingBody(false);
 	};
 
-	return (
-		<div
-			className={styles.editableText}
-			onClick={startEdit}
-			data-multiline={multiline ? multiline : null}
-		>
-			{editingBody ? (
-				multiline ? (
-					<textarea
-						autoFocus
-						onFocus={e => e.target.select()}
-						onKeyDown={onKeyDown}
-						onBlur={onSaveEdit}
-						onChange={e => setEditText(e.target.value)}
-						value={editText}
-					/>
-				) : (
+	const renderEditable = () => {
+		switch (usedMode) {
+			case 'single':
+				return (
 					<input
 						autoFocus
 						onFocus={e => e.target.select()}
@@ -74,7 +64,41 @@ export const EditableText: FC<EditableTextProps> = ({
 						value={editText}
 						className={styles.input}
 					/>
-				)
+				);
+			case 'multiline':
+				return (
+					<textarea
+						autoFocus
+						onFocus={e => e.target.select()}
+						onKeyDown={onKeyDown}
+						onBlur={onSaveEdit}
+						onChange={e => setEditText(e.target.value)}
+						value={editText}
+					/>
+				);
+			case 'date':
+				return (
+					<input
+						autoFocus
+						onFocus={e => e.target.select()}
+						onKeyDown={onKeyDown}
+						onBlur={onSaveEdit}
+						onChange={e => setEditText(e.target.value)}
+						value={editText}
+						className={styles.input}
+					/>
+				);
+		}
+	};
+
+	return (
+		<div
+			className={styles.editableText}
+			onClick={startEdit}
+			data-multiline={usedMode === 'multiline' ? true : null}
+		>
+			{editingBody ? (
+				renderEditable()
 			) : (
 				<span className={styles.previewText}>{text}</span>
 			)}

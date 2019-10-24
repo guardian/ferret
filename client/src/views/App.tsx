@@ -68,14 +68,15 @@ export const App = () => {
 
 						{/* Monitors */}
 						<Route exact path="/monitors" component={Monitors} />
-						<Route path="/monitors/:mId" component={Monitor} />
+						<Route exact path="/monitors/:mId" component={Monitor} />
 
 						{/* Projects */}
 						<Route
+							exact
 							path="/projects/:pId/timelines/:tId"
 							component={TimelineEditor}
 						/>
-						<Route path="/projects/:pId" component={Project} />
+						<Route exact path="/projects/:pId" component={Project} />
 						<Route exact path="/projects" component={Projects} />
 
 						{/* Settings */}
