@@ -15,11 +15,11 @@ export const Settings = () => {
 			<FormRow horizontal>
 				<h2>Theme</h2>
 				<WithDropdownMenu
-					proxy={() => (
+					proxy={
 						<Button appearance="toolset" isDropdown icon={<MdBrush />}>
 							Theme
 						</Button>
-					)}
+					}
 				>
 					<MenuItem
 						onClick={() => (document.documentElement.dataset.theme = 'aero')}

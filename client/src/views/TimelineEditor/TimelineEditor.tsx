@@ -27,7 +27,7 @@ export const TimelineEditor: FC<TimelineEditorProps> = ({ match }) => {
 						{
 							id: 'timeline',
 							title: tl.title,
-							width: 500,
+							width: 800,
 							children: (
 								<TimelineEntriesEditor
 									pId={match.params.pId}
@@ -64,7 +64,7 @@ export const TimelineEditor: FC<TimelineEditorProps> = ({ match }) => {
 	return (
 		<React.Fragment>
 			<MultiPanelPage onResizePanel={onResizePanel} panels={panels} />
-			<div
+			{/* <div
 				style={{
 					position: 'fixed',
 					bottom: 'var(--sp-base)',
@@ -74,7 +74,7 @@ export const TimelineEditor: FC<TimelineEditorProps> = ({ match }) => {
 				<WithModal
 					isOpen={modalOpen}
 					setIsOpen={setModalOpen}
-					proxy={() => <Button icon={<MdAddCircle />} />}
+					proxy={<Button icon={<MdAddCircle />} />}
 				>
 					<NewPanelModal
 						onSubmit={panel => {
@@ -83,7 +83,7 @@ export const TimelineEditor: FC<TimelineEditorProps> = ({ match }) => {
 						}}
 					/>
 				</WithModal>
-			</div>
+			</div> */}
 		</React.Fragment>
 	);
 };

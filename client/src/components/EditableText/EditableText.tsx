@@ -1,5 +1,7 @@
 import React, { FC, useState } from 'react';
 import styles from './EditableText.module.css';
+import { parseDate } from './parseDate';
+import _ from 'lodash';
 
 type Mode = 'single' | 'multiline' | 'date';
 type EditableTextProps = {
@@ -13,6 +15,9 @@ export const EditableText: FC<EditableTextProps> = ({
 	onChange,
 	mode,
 }) => {
+	const [isValidDate, setIsValidDate] = useState(
+		!!parseDate(text, 'from_start')
+	);
 	const [editingBody, setEditingBody] = useState(false);
 	const [editText, setEditText] = useState(text);
 
@@ -20,18 +25,14 @@ export const EditableText: FC<EditableTextProps> = ({
 
 	const startEdit: React.MouseEventHandler = e => {
 		e.stopPropagation();
-
-		setEditText(text);
-		setEditingBody(true);
+		if (!editingBody) {
+			setEditText(text);
+			setEditingBody(true);
+		}
 	};
 
 	const onKeyDown: React.KeyboardEventHandler = e => {
 		e.stopPropagation();
-
-		if (e.keyCode === 32) {
-			e.preventDefault();
-			setEditText(editText + ' ');
-		}
 
 		if (e.keyCode === 27) {
 			setEditingBody(false);
@@ -46,10 +47,29 @@ export const EditableText: FC<EditableTextProps> = ({
 		}
 	};
 
-	const onSaveEdit = () => {
-		onChange(editText);
-		setEditingBody(false);
+	const onKeyUp: React.KeyboardEventHandler = e => {
+		// There seems to be some slightly weird behaviour where a key up
+		// can cause a click in a parent button
+		e.preventDefault();
 	};
+
+	const onSaveEdit = () => {
+		if (editingBody) {
+			onChange(editText);
+			setEditingBody(false);
+		}
+	};
+
+	const checkDateValid = () => {
+		if (editText === '') {
+			setIsValidDate(true);
+		} else {
+			const date = parseDate(editText, 'from_start');
+			setIsValidDate(!!date);
+		}
+	};
+
+	const debouncedCheckDateValid = _.debounce(checkDateValid, 500);
 
 	const renderEditable = () => {
 		switch (usedMode) {
@@ -59,10 +79,10 @@ export const EditableText: FC<EditableTextProps> = ({
 						autoFocus
 						onFocus={e => e.target.select()}
 						onKeyDown={onKeyDown}
+						onKeyUp={onKeyUp}
 						onBlur={onSaveEdit}
 						onChange={e => setEditText(e.target.value)}
 						value={editText}
-						className={styles.input}
 					/>
 				);
 			case 'multiline':
@@ -82,10 +102,13 @@ export const EditableText: FC<EditableTextProps> = ({
 						autoFocus
 						onFocus={e => e.target.select()}
 						onKeyDown={onKeyDown}
+						onKeyUp={onKeyUp}
 						onBlur={onSaveEdit}
-						onChange={e => setEditText(e.target.value)}
+						onChange={e => {
+							debouncedCheckDateValid();
+							setEditText(e.target.value);
+						}}
 						value={editText}
-						className={styles.input}
 					/>
 				);
 		}
@@ -95,7 +118,9 @@ export const EditableText: FC<EditableTextProps> = ({
 		<div
 			className={styles.editableText}
 			onClick={startEdit}
-			data-multiline={usedMode === 'multiline' ? true : null}
+			data-editing={editingBody ? true : null}
+			data-mode={usedMode}
+			data-invalid-date={usedMode === 'date' && !isValidDate ? true : null}
 		>
 			{editingBody ? (
 				renderEditable()

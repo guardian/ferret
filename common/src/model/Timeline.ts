@@ -8,7 +8,7 @@ export type Timeline = {
 
 export type TimelineEntry = {
 	id: string;
-	happenedOn: Date;
+	happenedOn?: string;
 	title: string;
 	description: string;
 	evidence: TimelineEvidence[];

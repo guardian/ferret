@@ -36,11 +36,11 @@ export const App = () => {
 
 	const toolset = (
 		<WithDropdownMenu
-			proxy={() => (
+			proxy={
 				<Button appearance="toolset" isDropdown icon={<MdAccountCircle />}>
 					{user ? user.displayName : '<Unknown User>'}
 				</Button>
-			)}
+			}
 		>
 			<MenuItem label="Settings" to="/settings" />
 			<MenuItem label="Help" disabled />

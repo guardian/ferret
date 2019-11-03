@@ -29,7 +29,7 @@ export const Monitors: FC<MonitorsProps> = ({ match }) => {
 				<WithModal
 					isOpen={newModalOpen}
 					setIsOpen={setNewModalOpen}
-					proxy={() => <Button>New Monitor</Button>}
+					proxy={<Button>New Monitor</Button>}
 				>
 					<NewMonitorModal
 						onSuccess={() => {

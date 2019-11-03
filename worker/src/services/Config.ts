@@ -24,6 +24,10 @@ export const getConfig = () => {
 	const config = process.env['CONFIG_PATH']!;
 
 	return {
+		grid: {
+			apiKey: required(config, 'grid_api_key'),
+			apiHost: required(config, 'grid_api_host'),
+		},
 		twitter: {
 			consumerKey: required(config, 'twitter_consumer_key'),
 			consumerSecret: required(config, 'twitter_consumer_secret'),

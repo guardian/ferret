@@ -21,7 +21,7 @@ export const NewPanelModal: FC<NewPanelModalProp> = ({ onSubmit }) => {
 
 	const menu = (
 		<WithDropdownMenu
-			proxy={() => <Button appearance="transparent" icon={<MdMenu />} />}
+			proxy={<Button appearance="transparent" icon={<MdMenu />} />}
 		>
 			<MenuItem label="Remove" />
 		</WithDropdownMenu>

@@ -2,8 +2,6 @@ import React, { FC, useState } from 'react';
 import { Panel, Form, FormRow, Button } from '@guardian/threads';
 import { createMonitor } from '../../services/monitors';
 
-import styles from './NewMonitorModal.module.css';
-
 type NewMonitorModalProps = {
 	onSuccess: () => void;
 	onError: () => void;
@@ -13,40 +11,66 @@ export const NewMonitorModal: FC<NewMonitorModalProps> = ({
 	onSuccess,
 	onError,
 }) => {
-	const [newName, setNewName] = useState('');
-	const [newQuery, setNewQuery] = useState('');
+	const [name, setName] = useState('');
+	const [monitorType, setMonitorType] = useState(undefined as
+		| string
+		| undefined);
+	const [query, setQuery] = useState('');
+
+	const renderFields = () => {
+		switch (monitorType) {
+			case 'grid':
+			case 'twitter':
+				return (
+					<FormRow title="Query">
+						<input
+							type="text"
+							placeholder="Enter query..."
+							value={query}
+							onChange={e => setQuery(e.target.value)}
+						/>
+					</FormRow>
+				);
+			default:
+				return <div>Select a monitor type</div>;
+		}
+	};
 
 	return (
 		<Panel title="Add Monitor">
 			<Form
 				onSubmit={() => {
-					createMonitor(newName, newQuery)
-						.then(onSuccess)
-						.catch(onError);
+					if (monitorType === 'grid' || monitorType === 'twitter') {
+						createMonitor(name, monitorType, query)
+							.then(onSuccess)
+							.catch(onError);
+					} else {
+						alert('unknown type: ' + monitorType);
+					}
 				}}
 			>
 				<FormRow title="Name">
 					<input
 						type="text"
-						placeholder="Name"
+						placeholder="Enter name..."
 						autoFocus
-						value={newName}
-						onChange={e => setNewName(e.target.value)}
+						value={name}
+						onChange={e => setName(e.target.value)}
 					/>
 				</FormRow>
-				<FormRow title="Query">
-					<input
-						type="text"
-						placeholder="Query"
-						value={newQuery}
-						onChange={e => setNewQuery(e.target.value)}
-					/>
-					<small className={styles.rateWarning}>
-						Please don't waste our rate limit!
-					</small>
+				<FormRow title="Type">
+					<select
+						value={monitorType}
+						onChange={e => setMonitorType(e.target.value)}
+					>
+						<option>Select type</option>
+						<option value="grid">Grid</option>
+						<option value="twitter">Twitter</option>
+					</select>
 				</FormRow>
+				{renderFields()}
 				<FormRow horizontal>
-					<Button type="submit" disabled={!newName || !newQuery}>
+					<Button type="submit" disabled={!name || !monitorType || !query}>
 						Create
 					</Button>
 				</FormRow>

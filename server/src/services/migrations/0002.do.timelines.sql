@@ -13,7 +13,7 @@ CREATE TABLE timeline_entries (
     id          UUID PRIMARY KEY,
     timeline_id UUID REFERENCES timelines(id) ON DELETE CASCADE NOT NULL,
     index       INT NOT NULL,
-    happened_on TIMESTAMPTZ,
+    happened_on TEXT,
     title       TEXT NOT NULL,
     description TEXT NOT NULL
 );

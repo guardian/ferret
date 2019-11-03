@@ -105,16 +105,10 @@ export class ProjectsController {
 		checkProjectPermissions(this.db, ProjectAccessLevel.Write),
 		postTimelineEntryFormValidators,
 		(req: Request, res: Response) => {
-			const { happenedOn, title, description, evidence } = req.body;
+			const { title, description, evidence } = req.body;
 
 			this.db.projectQueries
-				.insertTimelineEntry(
-					req.params.tId,
-					happenedOn,
-					title,
-					description,
-					evidence
-				)
+				.insertTimelineEntry(req.params.tId, title, description, evidence)
 				.then(() => res.status(201).send())
 				.catch(err =>
 					handleFailure(res, err, 'Failed to insert timeline entry')
@@ -149,6 +143,21 @@ export class ProjectsController {
 				.then(() => res.status(204).send())
 				.catch(err =>
 					handleFailure(res, err, 'Failed to update timeline entry')
+				);
+		},
+	];
+
+	deleteTimelineEntry = () => [
+		checkLogin,
+		checkProjectPermissions(this.db, ProjectAccessLevel.Write),
+		(req: Request, res: Response) => {
+			const { eId } = req.params;
+
+			this.db.projectQueries
+				.deleteTimelineEntry(eId)
+				.then(() => res.status(204).send())
+				.catch(err =>
+					handleFailure(res, err, 'Failed to delete timeline entry')
 				);
 		},
 	];

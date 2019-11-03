@@ -7,7 +7,7 @@ export declare type Timeline = {
 };
 export declare type TimelineEntry = {
     id: string;
-    happenedOn: Date;
+    happenedOn?: string;
     title: string;
     description: string;
     evidence: TimelineEvidence[];

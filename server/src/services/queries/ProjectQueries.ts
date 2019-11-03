@@ -163,7 +163,6 @@ export class ProjectQueries {
 
 	insertTimelineEntry = async (
 		timelineId: string,
-		happenedOn: number,
 		title: string,
 		description: string,
 		evidence: TimelineEvidence[]
@@ -172,12 +171,12 @@ export class ProjectQueries {
 			const id = uuidv4();
 
 			await client.query({
-				text: `INSERT INTO timeline_entries (id, timeline_id, index, happened_on, title, description) (
-						SELECT $1, $2, COALESCE(MAX(index) + 1, 0), $3, $4, $5 
+				text: `INSERT INTO timeline_entries (id, timeline_id, index, title, description) (
+						SELECT $1, $2, COALESCE(MAX(index) + 1, 0), $3, $4 
 						FROM timeline_entries 
 						WHERE timeline_id = $2
 					)`,
-				values: [id, timelineId, happenedOn, title, description],
+				values: [id, timelineId, title, description],
 			});
 
 			for (let i = 0; i < evidence.length; i++) {
@@ -195,7 +194,7 @@ export class ProjectQueries {
 
 	updateTimelineEntry = async (
 		entryId: string,
-		happenedOn: number,
+		happenedOn: string | undefined,
 		title: string,
 		description: string
 	): Promise<void> => {
@@ -203,6 +202,15 @@ export class ProjectQueries {
 			text:
 				'UPDATE timeline_entries SET happened_on = $1, title = $2, description = $3 WHERE id = $4',
 			values: [happenedOn, title, description, entryId],
+		});
+
+		return;
+	};
+
+	deleteTimelineEntry = async (entryId: string): Promise<void> => {
+		await this.pool.query({
+			text: 'DELETE FROM timeline_entries WHERE id = $1',
+			values: [entryId],
 		});
 
 		return;

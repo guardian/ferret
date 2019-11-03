@@ -44,7 +44,6 @@ export const createTimeline = (pId: string, title: string, image: string) => {
 export const createTimelineEntry = (
 	pId: string,
 	tId: string,
-	happenedOn: Date,
 	title: string,
 	description: string,
 	evidence: TimelineEvidence[] = []
@@ -53,7 +52,6 @@ export const createTimelineEntry = (
 		method: 'POST',
 		headers: new Headers({ 'Content-Type': 'application/json' }),
 		body: JSON.stringify({
-			happenedOn: happenedOn.toISOString(),
 			title,
 			description,
 			evidence,
@@ -76,6 +74,12 @@ export const updateTimelineEntry = async (
 		method: 'PUT',
 		headers: new Headers({ 'Content-Type': 'application/json' }),
 		body: JSON.stringify(entry),
+	});
+};
+
+export const deleteTimelineEntry = (pId: string, tId: string, eId: string) => {
+	return authFetch(`/api/projects/${pId}/timelines/${tId}/entries/${eId}`, {
+		method: 'DELETE',
 	});
 };
 

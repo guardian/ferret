@@ -5,7 +5,7 @@
 	"proxy": "http://localhost:9999",
 	"dependencies": {
 		"@guardian/ferret-common": "file:../common",
-		"@guardian/threads": "^0.21.24",
+		"@guardian/threads": "^0.21.36",
 		"create-react-context": "^0.3.0",
 		"history": "^4.10.1",
 		"jwt-decode": "^2.2.0",

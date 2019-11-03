@@ -3,10 +3,8 @@ BEGIN;
 CREATE TABLE monitors (
     id           UUID PRIMARY KEY,
     project_id   UUID REFERENCES projects(id) ON DELETE CASCADE NOT NULL,
-    name         TEXT NOT NULL,
+    title        TEXT NOT NULL,
     query        TEXT NOT NULL,
-    updated_on   TIMESTAMPTZ,
-    since_id     TEXT 
 );
 
 CREATE TYPE JOB_TYPE AS ENUM (

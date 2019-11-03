@@ -1,9 +1,19 @@
-import { Card, getIncrementingAccent, FormRow, Form } from '@guardian/threads';
-import React, { FC, useState, DragEventHandler } from 'react';
-import { EditableText } from '../../components/EditableText/EditableText';
+import { TimelineEntry } from '@guardian/ferret-common';
+import {
+	Card,
+	EditableText,
+	FormRow,
+	getIncrementingAccent,
+} from '@guardian/threads';
+import React, {
+	Component,
+	DragEventHandler,
+	useState,
+	createRef,
+	RefObject,
+} from 'react';
 import styles from './EntryCard.module.css';
 import { EvidenceCard } from './EvidenceCard';
-import { TimelineEntry } from '@guardian/ferret-common';
 
 type EntryCardProps = {
 	entry: TimelineEntry;
@@ -12,79 +22,88 @@ type EntryCardProps = {
 	deleteEntry: () => void;
 };
 
-export const EntryCard: FC<EntryCardProps> = ({
-	entry,
-	index,
-	updateEntry,
-	deleteEntry,
-}) => {
-	const { title, description, happenedOn, evidence } = entry;
-	const [happenedOnText, setHappenedOnText] = useState('date');
-	const [draggingOver, setDraggingOver] = useState(false);
+type EntryCardState = {
+	draggingOver: boolean;
+};
 
-	const handleDragOver: DragEventHandler = e => {
-		const { files, items } = e.dataTransfer;
-		if (e.dataTransfer.files.length > 0) {
-			console.log('drop file!', e.dataTransfer.files);
-			setDraggingOver(true);
-		}
+export class EntryCard extends Component<EntryCardProps, EntryCardState> {
+	cardRef: RefObject<Card> = createRef();
 
-		if (e.dataTransfer.items.length > 0) {
-			console.log('drop item!', e.dataTransfer.items);
-			setDraggingOver(true);
+	state: EntryCardState = {
+		draggingOver: false,
+	};
+
+	collapse = () => {
+		if (this.cardRef.current) {
+			this.cardRef.current.setOpen(false);
 		}
 	};
 
-	return (
-		<Card
-			title={
-				<div className={styles.title}>
-					<EditableText
-						text={title}
-						onChange={title => {
-							updateEntry({ ...entry, title });
-						}}
-					/>
+	onDragOver = () => {};
 
-					<EditableText
-						text={happenedOnText}
-						mode="date"
-						onChange={date => {
-							setHappenedOnText(date);
-						}}
-					/>
-				</div>
-			}
-			draggable
-			onDelete={deleteEntry}
-			accent={getIncrementingAccent(index)}
-		>
-			<div
-				className={styles.card}
-				onDragOver={handleDragOver}
-				onDragLeave={() => setDraggingOver(false)}
+	onDragLeave = () => {};
+
+	render() {
+		const { updateEntry, deleteEntry, entry, index } = this.props;
+		const { draggingOver } = this.state;
+
+		const { title, description, happenedOn, evidence } = entry;
+
+		return (
+			<Card
+				ref={this.cardRef}
+				title={
+					<div className={styles.title}>
+						<EditableText
+							text={title}
+							onChange={title => {
+								updateEntry({ ...entry, title });
+							}}
+						/>
+
+						<EditableText
+							text={happenedOn ? happenedOn : 'Unknown'}
+							mode="date"
+							onChange={happenedOn => {
+								updateEntry({
+									...entry,
+									happenedOn,
+								});
+							}}
+						/>
+					</div>
+				}
+				draggable
+				onDelete={deleteEntry}
+				accent={getIncrementingAccent(index)}
 			>
-				{draggingOver && <div className={styles.dropIndicator}>Drop it!</div>}
-				<FormRow title="Description">
-					<EditableText
-						text={description}
-						mode="multiline"
-						onChange={description => {
-							updateEntry({ ...entry, description });
-						}}
-					/>
-				</FormRow>
-				{evidence.length > 0 && (
-					<FormRow title="Evidence">
-						<ul className={styles.cardEvidenceItems}>
-							{evidence.map(e => (
-								<EvidenceCard type="link" title={e.title} />
-							))}
-							<EvidenceCard type="placeholder" title="Add" />
-						</ul>
+				<div
+					className={styles.card}
+					onDragOver={this.onDragOver}
+					onDragLeave={this.onDragLeave}
+				>
+					{draggingOver && <div className={styles.dropIndicator}>Drop it!</div>}
+					<FormRow title="Description">
+						<EditableText
+							text={description}
+							mode="multiline"
+							onChange={description => {
+								updateEntry({ ...entry, description });
+							}}
+						/>
 					</FormRow>
-				)}
-			</div>
-		</Card>
-	);
-};
+					{evidence.length > 0 && (
+						<FormRow title="Evidence">
+							<ul className={styles.cardEvidenceItems}>
+								{evidence.map(e => (
+									<EvidenceCard type="link" title={e.title} />
+								))}
+								<EvidenceCard type="placeholder" title="Add" />
+							</ul>
+						</FormRow>
+					)}
+				</div>
+			</Card>
+		);
+	}
+}

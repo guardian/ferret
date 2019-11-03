@@ -38,12 +38,12 @@ export const Project: FC<ProjectProps> = ({ match }) => {
 				<h1>{project.title}</h1>
 				<ControlBox>
 					<WithModal
-						proxy={() => (
+						proxy={
 							<MenuCard
 								title="New Timeline"
 								backgroundImage="/images/plus.png"
 							/>
-						)}
+						}
 						isOpen={timelineModalOpen}
 						setIsOpen={setTimelineModalOpen}
 					>

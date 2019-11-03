@@ -907,10 +907,10 @@
 "@guardian/ferret-common@file:../common":
   version "1.0.0"
 
-"@guardian/threads@^0.21.24":
-  version "0.21.24"
-  resolved "https://registry.yarnpkg.com/@guardian/threads/-/threads-0.21.24.tgz#a38703f22e9876cb80e44d62597e1141b73597d0"
-  integrity sha512-0H3IDW1tnAiCEpqjZ43aQVNoojfvBTUdAEyek9Yi6ICgpLLEOAeFpDC0v3sP7buXUWMWWOlQhy1Mkbzm1xPmFQ==
+"@guardian/threads@^0.21.36":
+  version "0.21.36"
+  resolved "https://registry.yarnpkg.com/@guardian/threads/-/threads-0.21.36.tgz#26c0b4ba6cc8cd8c59b2f88968c6a5053ecaa328"
+  integrity sha512-5KULlTiBsolz/Yji1HXODG4zVdcdCsg+qGhgxQ9MHFKu80RWi/R9biePcrAVgo8NmyNErxTR8Kx8CivWnL47BA==
   dependencies:
     lodash.debounce "^4.0.8"
     lodash.inrange "^3.3.6"

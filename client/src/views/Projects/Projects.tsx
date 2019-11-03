@@ -24,9 +24,9 @@ export const Projects = () => {
 			<h1>Projects</h1>
 			<ControlBox>
 				<WithModal
-					proxy={() => (
+					proxy={
 						<MenuCard title="New Project" backgroundImage="/images/plus.png" />
-					)}
+					}
 					isOpen={createModalOpen}
 					setIsOpen={setCreateModalOpen}
 				>

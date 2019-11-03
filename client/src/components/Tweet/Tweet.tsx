@@ -23,7 +23,7 @@ export const Tweet: FC<TweetProps> = ({ tweet, media }) => {
 			<Button appearance="toolset" icon={<MdNoteAdd />} />
 			<WithDropdownMenu
 				origin="left"
-				proxy={() => <Button appearance="toolset" icon={<MdLabelOutline />} />}
+				proxy={<Button appearance="toolset" icon={<MdLabelOutline />} />}
 			>
 				<TagMenuItem
 					label="Over 9000 Bijis"

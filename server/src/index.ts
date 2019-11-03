@@ -21,7 +21,7 @@ async function main() {
 
 	const db = new Database(config);
 	await db.connect();
-	await db.applyMigrations();
+	//await db.applyMigrations();
 
 	// TODO GoogleAuth
 
@@ -74,6 +74,10 @@ async function main() {
 	app.put(
 		'/api/projects/:pId/timelines/:tId/entries/:eId',
 		...projects.putTimelineEntry()
+	);
+	app.delete(
+		'/api/projects/:pId/timelines/:tId/entries/:eId',
+		...projects.deleteTimelineEntry()
 	);
 	//app.get(
 	//	'/api/projects/:pId/timelines/:tId/evidence',

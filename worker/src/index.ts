@@ -1,7 +1,7 @@
 import path from 'path';
 import { promises as fs } from 'fs';
 import Twitter from 'twitter';
-import { getConfig } from './Config';
+import { getConfig } from './services/Config';
 import { download } from './download';
 import { uploadObject, uploadFile } from './S3';
 import os from 'os';
