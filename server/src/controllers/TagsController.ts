@@ -1,6 +1,6 @@
 import { Database } from '../services/Database';
 import { Request, Response } from 'express';
-import { handleFailure, checkLogin } from './helpers';
+import { handleFailure, checkLoginAuth } from './helpers';
 import { postTagFormValidators } from '../model/forms/PostTagForm';
 import { validationResult } from 'express-validator';
 
@@ -12,7 +12,7 @@ export class TagsController {
 	}
 
 	listTags = () => [
-		checkLogin,
+		checkLoginAuth,
 		(req: Request, res: Response) => {
 			this.db.tagQueries
 				.listTags()
@@ -24,7 +24,7 @@ export class TagsController {
 	];
 
 	insertTag = () => [
-		checkLogin,
+		checkLoginAuth,
 		postTagFormValidators,
 		async (req: Request, res: Response) => {
 			const errors = validationResult(req);

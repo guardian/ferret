@@ -14,7 +14,10 @@ const fromFsRoot = (path: string) => {
 
 const required = (directory: string, file: string): string => {
 	try {
-		return fs.readFileSync(fromFsRoot(`${directory}/${file}`)).toString();
+		return fs
+			.readFileSync(fromFsRoot(`${directory}/${file}`))
+			.toString()
+			.trim();
 	} catch (err) {
 		throw new Error(`Failed to get config at '${directory}/${file}' - ${err}`);
 	}
@@ -24,6 +27,9 @@ export const getConfig = () => {
 	const config = process.env['CONFIG_PATH']!;
 
 	return {
+		app: {
+			secret: required(config, 'app_secret'),
+		},
 		grid: {
 			apiKey: required(config, 'grid_api_key'),
 			apiHost: required(config, 'grid_api_host'),
@@ -33,13 +39,6 @@ export const getConfig = () => {
 			consumerSecret: required(config, 'twitter_consumer_secret'),
 			accessTokenKey: required(config, 'twitter_access_token_key'),
 			accessTokenSecret: required(config, 'twitter_access_token_secret'),
-		},
-		database: {
-			host: required(config, 'db_host'),
-			port: Number(required(config, 'db_port')),
-			database: required(config, 'db_database'),
-			user: required(config, 'db_user'),
-			password: required(config, 'db_password'),
 		},
 	};
 };

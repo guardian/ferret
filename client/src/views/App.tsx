@@ -6,13 +6,14 @@ import {
 	WithDropdownMenu,
 } from '@guardian/threads';
 import React from 'react';
-import { MdAccountCircle } from 'react-icons/md';
+import { MdAccountCircle, MdFolderOpen, MdRssFeed } from 'react-icons/md';
+import { TiBell, TiFlowChildren } from 'react-icons/ti';
+import { FiDatabase } from 'react-icons/fi';
 import { Redirect, Route, Switch } from 'react-router';
 import { clearToken, useAuthState } from '../state/AuthState';
 import { Dashboard } from './Dashboard/Dashboard';
 import { Login } from './Login/Login';
-import { Monitor } from './Monitor/Monitor';
-import { Monitors } from './Monitors/Monitors';
+import { Feeds } from './Feeds/Feeds';
 import { Project } from './Project/Project';
 import { Projects } from './Projects/Projects';
 import { Settings } from './Settings/Settings';
@@ -25,11 +26,20 @@ export const App = () => {
 
 	const menu = (
 		<div style={{ display: 'flex' }}>
-			<Button appearance="transparent" to="/projects">
+			<Button appearance="transparent" to="/projects" icon={<MdFolderOpen />}>
 				Projects
 			</Button>
-			<Button appearance="transparent" to="/monitors">
-				Monitors
+			<Button appearance="transparent" to="/datasets" icon={<FiDatabase />}>
+				Datasets
+			</Button>
+			<Button appearance="transparent" to="/feeds" icon={<MdRssFeed />}>
+				Feeds
+			</Button>
+			<Button appearance="transparent" to="/alerts" icon={<TiBell />}>
+				Alerts
+			</Button>
+			<Button appearance="transparent" to="/entities" icon={<TiFlowChildren />}>
+				Entities
 			</Button>
 		</div>
 	);
@@ -66,9 +76,8 @@ export const App = () => {
 						{/* Dashboard */}
 						<Route exact path="/" component={Dashboard} />
 
-						{/* Monitors */}
-						<Route exact path="/monitors" component={Monitors} />
-						<Route exact path="/monitors/:mId" component={Monitor} />
+						{/* Feeds */}
+						<Route exact path="/feeds" component={Feeds} />
 
 						{/* Projects */}
 						<Route

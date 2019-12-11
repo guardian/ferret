@@ -2,10 +2,10 @@ import Twitter from 'twitter';
 import path from 'path';
 import os from 'os';
 import { promises as fs } from 'fs';
-import { uploadObject, uploadFile } from './S3';
+import { uploadObject, uploadFile } from '../../S3';
 import { extractMedia } from './extractMedia';
 import { download } from './download';
-import { Ferret } from './FerretApi';
+import { Ferret } from '../../FerretApi';
 
 const search = (
 	client: Twitter,
@@ -112,6 +112,6 @@ export const processTweets = async (
 	// 	}
 	// }
 
-	// ferret.updateMonitor(pId, mId, nextSinceId, updatedAt);
-	// update monitor
+	// ferret.updateFeed(pId, mId, nextSinceId, updatedAt);
+	// update feed
 };

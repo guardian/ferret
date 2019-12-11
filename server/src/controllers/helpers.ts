@@ -4,6 +4,7 @@ import { Database } from '../services/Database';
 import { User, Permission } from '@guardian/ferret-common';
 import { ProjectAccessLevel } from '@guardian/ferret-common/dist/model/Project';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 
 // Can probably do this more cleanly with middleware
 export const handleFailure = (res: Response, err: any, message: string) => {
@@ -17,7 +18,40 @@ export const errorResponse = (message: string) => {
 	};
 };
 
-export const checkLogin = passport.authenticate('jwt', { session: false });
+export const checkHmacAuth = (secret: string) => (
+	req: Request,
+	res: Response,
+	next: Function
+) => {
+	const hash = req.header('Authorization');
+	const date = req.header('X-Authorization-Timestamp');
+
+	if (date && Date.now() - Date.parse(date) < 500) {
+		const hmac = crypto.createHmac('sha256', secret);
+		const verb = req.method;
+		const url = req.url;
+
+		const content = date + '\n' + verb + '\n' + url;
+		console.log(secret, date, verb, url);
+
+		hmac.update(content, 'utf8');
+
+		const serverHash = 'HMAC ' + hmac.digest('base64');
+
+		console.log(`Send - ${hash}`);
+		console.log(`Gen  - ${serverHash}`);
+		if (hash === serverHash) {
+			return next();
+		} else {
+			return res.status(401).send();
+		}
+	} else {
+		console.error('HMAC timestamp undefined or too old!');
+		return res.status(401).send();
+	}
+};
+
+export const checkLoginAuth = passport.authenticate('jwt', { session: false });
 
 export const getUser = (req: Request): User => {
 	const auth = req.headers.authorization;
@@ -60,18 +94,18 @@ export const checkProjectPermissions = (
 	}
 
 	switch (requiredLevel) {
-		case ProjectAccessLevel.Read: {
+		case 'read': {
 			next();
 			return;
 		}
-		case ProjectAccessLevel.Write: {
-			if (level && level !== ProjectAccessLevel.Read) {
+		case 'write': {
+			if (level && level !== 'read') {
 				next();
 				return;
 			}
 		}
-		case ProjectAccessLevel.Admin: {
-			if (level && level === ProjectAccessLevel.Admin) {
+		case 'admin': {
+			if (level && level === 'admin') {
 				next();
 				return;
 			}

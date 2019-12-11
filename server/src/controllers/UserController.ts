@@ -2,7 +2,7 @@ import { Database } from '../services/Database';
 import { Request, Response } from 'express';
 import {
 	handleFailure,
-	checkLogin,
+	checkLoginAuth,
 	getUser,
 	checkUserPermissions,
 } from './helpers';
@@ -18,7 +18,7 @@ export class UsersController {
 	}
 
 	listUsers = () => [
-		checkLogin,
+		checkLoginAuth,
 		(req: Request, res: Response) => {
 			this.db.userQueries
 				.listUsers()
@@ -30,7 +30,7 @@ export class UsersController {
 	];
 
 	getUser = () => [
-		checkLogin,
+		checkLoginAuth,
 		(req: Request, res: Response) => {
 			this.db.userQueries
 				.getUser(req.params.uId)
@@ -40,7 +40,7 @@ export class UsersController {
 	];
 
 	insertUser = () => [
-		checkLogin,
+		checkLoginAuth,
 		checkUserPermissions('manage_users'),
 		postUserFormValidators,
 		async (req: Request, res: Response) => {
@@ -63,7 +63,7 @@ export class UsersController {
 	];
 
 	patchSetting = () => [
-		checkLogin,
+		checkLoginAuth,
 		async (req: Request, res: Response) => {
 			const errors = validationResult(req);
 

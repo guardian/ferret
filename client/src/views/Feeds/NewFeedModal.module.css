@@ -1,0 +1,13 @@
+.rateWarning {
+	margin-left: var(--sp-small);
+}
+
+.frequencyGroup {
+	display: flex;
+	flex-direction: row;
+	margin-bottom: var(--sp-base);
+}
+
+.frequencyGroup > *:not(:last-child) {
+	margin-right: var(--sp-base);
+}

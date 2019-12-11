@@ -1,13 +1,10 @@
-import path from 'path';
-import { promises as fs } from 'fs';
 import Twitter from 'twitter';
-import { getConfig } from './services/Config';
-import { download } from './download';
-import { uploadObject, uploadFile } from './S3';
-import os from 'os';
-import { extractMedia } from './extractMedia';
-import { processTweets } from './Twitter';
 import { Ferret } from './FerretApi';
+import { getConfig } from './services/Config';
+import { FeedJob } from '@guardian/ferret-common';
+
+import AsyncPolling from 'async-polling';
+import { GridProcessor } from './processors/Grid';
 
 const config = getConfig();
 
@@ -18,27 +15,54 @@ const client = new Twitter({
 	access_token_secret: config.twitter.accessTokenSecret,
 });
 
-//const database = new Database(config);
-const ferret = new Ferret('http://localhost:9999');
+const ferret = new Ferret('http://localhost:9999', config);
 
-const getTweets = (
-	pId: string,
-	mId: string,
-	query: string,
-	sinceId?: string
-) => {
-	// Todo extract form job queue
+// Setup processors
+const gridProcessor = new GridProcessor(config);
 
-	processTweets(ferret, client, pId, mId, query, sinceId);
+// Begin poller
+AsyncPolling(async end => {
+	console.log('polling!');
+	const jobs: FeedJob[] = await ferret.getJobs();
 
-	//database.updateMonitor(mId, sinceId);
-	// do search
-	// write results
-	// update monitor row with new "now time"
-};
+	for (let i = 0; i < jobs.length; i++) {
+		const job = jobs[i];
 
-getTweets(
-	'83bbc735-af43-40d9-88fc-68db03c20ea8',
-	'84b7eaa1-8941-4da9-b562-7093bc28da0f',
-	'#TwitterKurds'
-);
+		const heartbeater = AsyncPolling(async end => {
+			await ferret.heartbeatJob(job.jobId);
+			end();
+		}, 1000);
+
+		heartbeater.run();
+
+		console.log(`Processing job ${job.jobId}`);
+
+		const processedOn = new Date();
+
+		try {
+			switch (job.feed.type) {
+				case 'grid':
+					const images = await gridProcessor.getImages(
+						job.addedOn,
+						processedOn.toISOString(),
+						job.feed.parameters.query
+					);
+					// upload images
+					images.forEach(i => {
+						ferret.insertDocument(job.feed.datasetId, i.id, i);
+					});
+
+					break;
+			}
+			// Write job sucess
+			ferret.updateJob(job.jobId, 'done', processedOn.toISOString());
+		} catch (err) {
+			console.error(`Failure while processing job ${job.jobId}`);
+			ferret.updateJob(job.jobId, 'failed', processedOn.toISOString());
+		}
+
+		heartbeater.stop();
+	}
+
+	end();
+}, 5000).run();

@@ -7,7 +7,7 @@ import { postTimelineFormValidators } from '../model/forms/PostTimelineForm';
 import { putReorderTimelineEntriesFormValidators } from '../model/forms/PutReorderTimelineEntriesForm';
 import { Database } from '../services/Database';
 import {
-	checkLogin,
+	checkLoginAuth,
 	checkProjectPermissions,
 	checkUserPermissions,
 	getUser,
@@ -22,7 +22,7 @@ export class ProjectsController {
 	}
 
 	listProjects = () => [
-		checkLogin,
+		checkLoginAuth,
 		(req: Request, res: Response) => {
 			const user = getUser(req);
 			this.db.projectQueries
@@ -36,7 +36,7 @@ export class ProjectsController {
 
 	insertProject = () => {
 		return [
-			checkLogin,
+			checkLoginAuth,
 			checkUserPermissions('manage_projects'),
 			postProjectFormValidators,
 			async (req: Request, res: Response) => {
@@ -61,8 +61,8 @@ export class ProjectsController {
 	};
 
 	listTimelines = () => [
-		checkLogin,
-		checkProjectPermissions(this.db, ProjectAccessLevel.Read),
+		checkLoginAuth,
+		checkProjectPermissions(this.db, 'read'),
 		(req: Request, res: Response) => {
 			this.db.projectQueries
 				.listTimelines(req.params.pId)
@@ -74,8 +74,8 @@ export class ProjectsController {
 	];
 
 	insertTimeline = () => [
-		checkLogin,
-		checkProjectPermissions(this.db, ProjectAccessLevel.Write),
+		checkLoginAuth,
+		checkProjectPermissions(this.db, 'write'),
 		postTimelineFormValidators,
 		(req: Request, res: Response) => {
 			const user = getUser(req);
@@ -88,8 +88,8 @@ export class ProjectsController {
 	];
 
 	getTimelineEntries = () => [
-		checkLogin,
-		checkProjectPermissions(this.db, ProjectAccessLevel.Read),
+		checkLoginAuth,
+		checkProjectPermissions(this.db, 'read'),
 		(req: Request, res: Response) => {
 			this.db.projectQueries
 				.listTimelineEntries(req.params.tId)
@@ -101,8 +101,8 @@ export class ProjectsController {
 	];
 
 	postTimelineEntry = () => [
-		checkLogin,
-		checkProjectPermissions(this.db, ProjectAccessLevel.Write),
+		checkLoginAuth,
+		checkProjectPermissions(this.db, 'write'),
 		postTimelineEntryFormValidators,
 		(req: Request, res: Response) => {
 			const { title, description, evidence } = req.body;
@@ -117,8 +117,8 @@ export class ProjectsController {
 	];
 
 	reorderTimelineEntries = () => [
-		checkLogin,
-		checkProjectPermissions(this.db, ProjectAccessLevel.Write),
+		checkLoginAuth,
+		checkProjectPermissions(this.db, 'write'),
 		putReorderTimelineEntriesFormValidators,
 		(req: Request, res: Response) => {
 			this.db.projectQueries
@@ -131,8 +131,8 @@ export class ProjectsController {
 	];
 
 	putTimelineEntry = () => [
-		checkLogin,
-		checkProjectPermissions(this.db, ProjectAccessLevel.Write),
+		checkLoginAuth,
+		checkProjectPermissions(this.db, 'write'),
 		postTimelineEntryFormValidators,
 		(req: Request, res: Response) => {
 			const { eId } = req.params;
@@ -148,8 +148,8 @@ export class ProjectsController {
 	];
 
 	deleteTimelineEntry = () => [
-		checkLogin,
-		checkProjectPermissions(this.db, ProjectAccessLevel.Write),
+		checkLoginAuth,
+		checkProjectPermissions(this.db, 'write'),
 		(req: Request, res: Response) => {
 			const { eId } = req.params;
 

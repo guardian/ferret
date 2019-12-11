@@ -1,42 +1,42 @@
 import React, { FC, useState, useEffect } from 'react';
 import { CenteredPage, Table, Button, WithModal } from '@guardian/threads';
-import { NewMonitorModal } from './NewMonitorModal';
-import { Monitor } from '@guardian/ferret-common';
-import { listMonitors } from '../../services/monitors';
+import { NewFeedModal } from './NewFeedModal';
+import { Feed } from '@guardian/ferret-common';
+import { listFeeds } from '../../services/feeds';
 import { match } from 'react-router';
 import { Link } from 'react-router-dom';
 
-import styles from './Monitors.module.css';
+import styles from './Feeds.module.css';
 
-type MonitorsProps = {
+type FeedsProps = {
 	match: match<{ pId: string }>;
 };
-export const Monitors: FC<MonitorsProps> = ({ match }) => {
+export const Feeds: FC<FeedsProps> = ({ match }) => {
 	const [newModalOpen, setNewModalOpen] = useState(false);
 
-	const [monitors, setMonitors] = useState([] as Monitor[]);
+	const [feeds, setFeeds] = useState([] as Feed[]);
 	const pId = match.params.pId;
 
 	useEffect(() => {
-		listMonitors().then(m => setMonitors(m));
+		listFeeds().then(m => setFeeds(m));
 	}, [pId]);
 
 	return (
 		<CenteredPage>
-			<h1>Monitors</h1>
+			<h1>Feeds</h1>
 			<div className={styles.controls}>
 				<input type="text" placeholder="Filter..." />
 				<WithModal
 					isOpen={newModalOpen}
 					setIsOpen={setNewModalOpen}
-					proxy={<Button>New Monitor</Button>}
+					proxy={<Button>New Feed</Button>}
 				>
-					<NewMonitorModal
+					<NewFeedModal
 						onSuccess={() => {
 							setNewModalOpen(false);
-							listMonitors().then(m => setMonitors(m));
+							listFeeds().then(m => setFeeds(m));
 						}}
-						onError={() => alert('Failed to create monitor')}
+						onError={() => alert('Failed to create feed')}
 					/>
 				</WithModal>
 			</div>
@@ -45,21 +45,17 @@ export const Monitors: FC<MonitorsProps> = ({ match }) => {
 				<thead>
 					<tr>
 						<th>Name</th>
-						<th>Query</th>
-						<th>Last Updated</th>
-						<th>Count</th>
+						<th>Type</th>
 					</tr>
 				</thead>
 				<tbody>
-					{monitors.map(m => {
+					{feeds.map(m => {
 						return (
 							<tr>
 								<td>
-									<Link to={`/monitors/${m.id}`}>{m.title}</Link>
+									<Link to={`/feeds/${m.id}`}>{m.title}</Link>
 								</td>
-								<td>{m.query}</td>
-								<td>{new Date().toLocaleString()}</td>
-								<td>{Math.floor(Math.random() * 1000)}</td>
+								<td>{m.type}</td>
 							</tr>
 						);
 					})}

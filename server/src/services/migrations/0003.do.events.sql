@@ -1,9 +1,5 @@
 BEGIN;
 
-------------
--- Events --
-------------
-
 CREATE TYPE EVENT_ACTION AS ENUM  ('create', 'update', 'delete');
 
 CREATE TABLE project_events (

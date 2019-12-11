@@ -1,11 +1,11 @@
 import Postgrator from 'postgrator';
 import { Pool } from 'pg';
 import { UserQueries } from './queries/UserQueries';
-import { MonitorQueries } from './queries/MonitorQueries';
+import { FeedQueries } from './queries/FeedQueries';
 import { Config } from './Config';
 import { ProjectQueries } from './queries/projectQueries';
 import { TagQueries } from './queries/TagQueries';
-//import { JobQueries } from './queries/JobQueries';
+import { DatasetQueries } from './queries/DatasetQueries';
 
 export class Database {
 	private host: string;
@@ -18,10 +18,10 @@ export class Database {
 	private pool: Pool;
 
 	public userQueries: UserQueries;
-	public monitorQueries: MonitorQueries;
+	public feedQueries: FeedQueries;
 	public projectQueries: ProjectQueries;
 	public tagQueries: TagQueries;
-	//public jobQueries: JobQueries;
+	public datasetQueries: DatasetQueries;
 
 	constructor(config: Config) {
 		const { host, port, database, user, password } = config.database;
@@ -40,9 +40,10 @@ export class Database {
 		});
 
 		this.userQueries = new UserQueries(this.pool);
-		this.monitorQueries = new MonitorQueries(this.pool);
+		this.feedQueries = new FeedQueries(this.pool);
 		this.projectQueries = new ProjectQueries(this.pool);
 		this.tagQueries = new TagQueries(this.pool);
+		this.datasetQueries = new DatasetQueries(this.pool);
 		//		this.jobQueries = new JobQueries(this.pool);
 	}
 

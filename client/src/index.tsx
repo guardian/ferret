@@ -9,6 +9,7 @@ import { ProjectsProvider } from './state/ProjectsState';
 
 const appContext = {
 	name: 'ferret',
+	logoSvg: 'ferret.svg',
 };
 
 export const history = createBrowserHistory();

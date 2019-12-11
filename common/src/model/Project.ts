@@ -1,8 +1,4 @@
-export const enum ProjectAccessLevel {
-	Read = 'read',
-	Write = 'write',
-	Admin = 'admin',
-}
+export type ProjectAccessLevel = 'read' | 'write' | 'admin';
 
 export type Project = {
 	id: string;

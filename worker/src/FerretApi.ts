@@ -1,45 +1,63 @@
 import fetch from 'node-fetch';
+import { createHmac } from './services/hmac';
+import { Config } from './services/Config';
+import { STATUS_CODES } from 'http';
+import { FeedJobStatus } from '@guardian/ferret-common';
 
 export class Ferret {
+	config: Config;
 	baseUrl: string;
 
-	constructor(baseUrl: string) {
+	constructor(baseUrl: string, config: Config) {
+		this.config = config;
 		this.baseUrl = baseUrl;
 	}
 
-	//getProjects = (): Promise<any> => {
-	//	return fetch(`${this.baseUrl}/api/projects`).then(res => res.json());
-	//};
+	createAuthHeaders = (verb: string, url: string) => {
+		const ts = new Date().toISOString();
 
-	//getMonitors = (pId: string): Promise<any> => {
-	//	return fetch(`${this.baseUrl}/api/projects/${pId}/monitors`).then(res =>
-	//		res.json()
-	//	);
-	//};
+		return {
+			Authorization: createHmac(this.config.app.secret, ts, verb, url),
+			'X-Authorization-Timestamp': ts,
+		};
+	};
 
-	//insertTweet = (pId: string, mId: string, tweet: any) => {
-	//	return fetch(`${this.baseUrl}/api/projects/${pId}/monitors/${mId}/tweets`, {
-	//		method: 'POST',
-	//		headers: { 'Content-Type': 'application/json' },
-	//		body: JSON.stringify(tweet),
-	//	});
-	//};
+	getJobs = () => {
+		const path = '/api/jobs';
+		return fetch(`${this.baseUrl}${path}`, {
+			headers: this.createAuthHeaders('GET', path),
+		}).then(res => res.json());
+	};
 
-	//updateMonitor = (
-	//	pId: string,
-	//	mId: string,
-	//	sinceId: string,
-	//	updatedAt: Date
-	//) => {
-	//	const updatedAtFormatted = updatedAt.toISOString();
+	heartbeatJob = (id: string) => {
+		const path = `/api/jobs/${id}/heartbeat`;
+		return fetch(`${this.baseUrl}${path}`, {
+			method: 'PUT',
+			headers: this.createAuthHeaders('PUT', path),
+		});
+	};
 
-	//	return fetch(`${this.baseUrl}/api/projects/${pId}/monitors/${mId}`, {
-	//		method: 'PUT',
-	//		headers: { 'Content-Type': 'application/json' },
-	//		body: JSON.stringify({
-	//			sinceId,
-	//			updatedAt: updatedAtFormatted,
-	//		}),
-	//	});
-	//};
+	updateJob = (id: string, status: FeedJobStatus, processedOn: string) => {
+		const path = `/api/jobs/${id}`;
+		return fetch(`${this.baseUrl}${path}`, {
+			method: 'PUT',
+			headers: this.createAuthHeaders('PUT', path),
+			body: JSON.stringify({
+				status,
+				processedOn,
+			}),
+		});
+	};
+
+	insertDocument = (datasetId: string, docId: string, data: any) => {
+		const path = `/api/datasets/${datasetId}/docs`;
+		return fetch(`${this.baseUrl}${path}`, {
+			method: 'POST',
+			headers: this.createAuthHeaders('POST', path),
+			body: JSON.stringify({
+				id: docId,
+				data,
+			}),
+		});
+	};
 }

@@ -5,13 +5,14 @@ import { UsersController } from './controllers/UserController';
 import { getConfig } from './services/Config';
 import { Database } from './services/Database';
 //import { Storage } from './services/storage';
-import { MonitorsController } from './controllers/MonitorController';
+import { JobController } from './controllers/JobConroller';
+import { FeedsController } from './controllers/FeedController';
 import { ProjectsController } from './controllers/ProjectController';
 import { TagsController } from './controllers/TagsController';
-import { JobsController } from './controllers/JobsController';
 import { initAuth } from './services/Auth';
 import passport from 'passport';
 import { AuthController } from './controllers/AuthController';
+import { DatasetController } from './controllers/DatasetController';
 
 async function main() {
 	// Services
@@ -21,17 +22,18 @@ async function main() {
 
 	const db = new Database(config);
 	await db.connect();
-	//await db.applyMigrations();
+	await db.applyMigrations();
 
 	// TODO GoogleAuth
 
 	// Controllers
 	const auth = new AuthController(db, config);
 	const users = new UsersController(db);
-	const monitors = new MonitorsController(db);
+	const jobs = new JobController(db, config);
+	const feeds = new FeedsController(db);
 	const projects = new ProjectsController(db);
 	const tags = new TagsController(db);
-	const jobs = new JobsController(db);
+	const datasets = new DatasetController(db, config);
 
 	// Routes
 	const port = 9999;
@@ -84,16 +86,18 @@ async function main() {
 	//	...projects.getTimelineEvidence
 	//);
 
-	// Monitors
-	app.get('/api/monitors', ...monitors.listMonitors());
-	app.get('/api/monitors/:mId', ...monitors.getMonitor());
-	app.post('/api/monitors', ...monitors.insertMonitor());
-	app.put('/api/monitors/:mId', ...monitors.updateMonitor());
-	app.get('/api/monitors/:mId/tweets', monitors.getMonitorTweets());
-	app.post('/api//monitors/:mId/tweets', ...monitors.insertTweetForMonitor());
+	// Feeds
+	app.get('/api/feeds', ...feeds.listFeeds());
+	app.get('/api/feeds/:fId', ...feeds.getFeed());
+	app.post('/api/feeds', ...feeds.insertFeed());
 
 	// Jobs
-	app.get('/api/jobs', ...jobs.listJobs());
+	app.get('/api/jobs', ...jobs.getReadyJobs());
+	app.put('/api/jobs/:jId', ...jobs.updateJob());
+	app.put('/api/jobs/:jId/heartbeat', ...jobs.heartbeatJob());
+
+	// Datasets
+	app.post('/api/datasets/:dId/docs', ...datasets.postDocument());
 
 	app.get('/api/management/healthcheck', (req: Request, res: Response) =>
 		res.send('OK')

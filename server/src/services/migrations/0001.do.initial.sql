@@ -10,7 +10,7 @@ CREATE TYPE PERMISSION AS ENUM (
     'system_user',      -- For other serivces, can do things like create/read/update jobs
     'manage_users',     -- Add/remove users and give them permissions
     'manage_projects',  -- Create/Remove projects
-    'manage_monitors'   -- Create/Remove monitors
+    'manage_feeds'   -- Create/Remove feeds
 );
 
 CREATE TABLE users (

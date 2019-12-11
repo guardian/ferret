@@ -59,7 +59,14 @@ export const Project: FC<ProjectProps> = ({ match }) => {
 						/>
 					</WithModal>
 				</ControlBox>
-				<h2>Recent Projects</h2>
+				<div>
+					<div>
+						<div>Recent items</div>
+						<div>Activity</div>
+					</div>
+					Everything else
+				</div>
+				<h2>Recent Items</h2>
 				<div className={styles.cardContainer}>
 					<div className={styles.cards}>
 						{timelines.map(t => (

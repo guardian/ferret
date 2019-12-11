@@ -1,6 +1,6 @@
 # ferret
 
-> A tool for open source monitoring.
+> A tool for open source feeding.
 
 | Component | Function                                       |
 | --------- | ---------------------------------------------- |

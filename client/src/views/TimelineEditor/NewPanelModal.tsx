@@ -38,7 +38,7 @@ export const NewPanelModal: FC<NewPanelModalProp> = ({ onSubmit }) => {
 						<optgroup label="Visualisation">
 							<option value="map">Map</option>
 						</optgroup>
-						<optgroup label="Monitors">
+						<optgroup label="Feeds">
 							<option value="grid::borisjohnson">
 								Grid Tracker: Boris Johnson
 							</option>
