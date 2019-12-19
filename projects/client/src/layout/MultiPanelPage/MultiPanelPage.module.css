@@ -1,0 +1,60 @@
+.multiPanelPage {
+	position: relative;
+	height: 100%;
+}
+
+.container {
+	display: flex;
+	flex-direction: row;
+	height: 100%;
+	overflow-x: auto;
+}
+
+.panel {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+.panelHeader {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	background-color: var(--color-primary);
+	color: var(--color-primary-text);
+	font-size: var(--fs-massive);
+	padding: var(--sp-base);
+	border-right: 2px solid var(--color-secondary-dark);
+	flex-shrink: 0;
+	height: 30px;
+}
+
+.panelGrabber {
+	padding-right: var(--sp-base);
+	width: 20px;
+	color: var(--color-primary-text);
+}
+
+.title {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.panelResizeHandle {
+	position: absolute;
+	height: 100%;
+	top: 0;
+	right: -5px;
+	min-width: 10px;
+	cursor: ew-resize;
+	width: 3px;
+	z-index: 100;
+}
+
+.panelBody {
+	border-right: 1px solid var(--color-border);
+	flex-grow: 1;
+	overflow: auto;
+}

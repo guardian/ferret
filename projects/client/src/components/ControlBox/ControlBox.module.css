@@ -1,0 +1,11 @@
+.controlBox {
+	display: flex;
+	flex-direction: row;
+	padding-bottom: var(--sp-large);
+	border-bottom: 1px solid var(--color-border);
+	margin: var(--sp-large);
+}
+
+.controlBox > * {
+	margin-right: var(--sp-large);
+}

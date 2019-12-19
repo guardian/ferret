@@ -1,0 +1,27 @@
+.header {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid var(--color-border);
+	padding: var(--sp-base);
+}
+
+.buttonContainer {
+	position: relative;
+	height: 100%;
+	background: red;
+}
+
+.button {
+	position: absolute;
+	top: calc(-1 * var(--sp-small));
+	left: 0;
+}
+
+.title {
+	width: 100%;
+	text-align: right;
+	font-size: 1.3em;
+	font-weight: bold;
+}

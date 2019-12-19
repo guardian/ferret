@@ -1,0 +1,12 @@
+.blocker {
+	width: 100vw;
+	height: 100vh;
+	background: rgba(0, 0, 0, 0.5);
+	pointer-events: none;
+}
+
+.aligner {
+	position: absolute;
+	margin: var(--sp-base);
+	pointer-events: initial;
+}

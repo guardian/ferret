@@ -1,6 +1,0 @@
-.tag {
-	border-radius: var(--radius-default);
-	margin: var(--sp-base);
-	padding: var(--sp-base);
-	box-shadow: var(--sh-normal);
-}

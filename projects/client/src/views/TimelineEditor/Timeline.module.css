@@ -1,0 +1,33 @@
+.container {
+	box-sizing: border-box;
+	position: relative;
+}
+
+.controls {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	background: var(--color-secondary);
+	border-bottom: 1px solid var(--color-border);
+	padding: var(--sp-small);
+	position: sticky;
+	top: 0;
+	z-index: 1;
+}
+
+.buttons {
+	display: flex;
+	flex-direction: row;
+}
+
+.buttons > * {
+	margin-right: var(--sp-base);
+}
+
+.timeline {
+	padding: var(--sp-base);
+}
+
+.timeline > * {
+	margin-bottom: var(--sp-base);
+}

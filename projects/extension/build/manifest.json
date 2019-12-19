@@ -1,0 +1,30 @@
+{
+	"manifest_version": 2,
+	"name": "Grabber",
+	"short_name": "Grabber",
+	"version": "1.0.0",
+	"description": "A utility for grabbing entities from various websites",
+	"icons": {
+		"128": "images/guardian-logo-128.png"
+	},
+	"permissions": ["storage", "*://localhost/*"],
+	"background": {
+		"scripts": ["./background/bundle.js"],
+		"persistent": false
+	},
+	"content_scripts": [
+		{
+			"matches": ["*://*/*"],
+
+			"js": ["./content_scripts/bundle.js"],
+			"run_at": "document_end"
+		}
+	],
+	"browser_action": {
+		"browser_style": true,
+		"default_popup": "browser_action/index.html",
+		"default_icon": {
+			"16": "images/guardian-logo-128.png"
+		}
+	}
+}

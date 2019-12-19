@@ -1,0 +1,95 @@
+.card {
+	border: 1px solid var(--color-border);
+	box-shadow: var(--sh-normal);
+	border-radius: var(--radius-default);
+	height: 150px;
+	width: 225px;
+	display: flex;
+	align-items: flex-end;
+	position: relative;
+	overflow: hidden;
+	text-align: unset;
+}
+
+.card:disabled {
+	filter: grayscale(1);
+}
+
+.card:not(:disabled) {
+	cursor: pointer;
+}
+
+.card:before {
+	transition: background-color 0.3s;
+	position: absolute;
+	top: 0;
+	left: 0;
+	content: ' ';
+	width: 100%;
+	height: 100%;
+	opacity: 1;
+	background-color: transparent;
+	z-index: 1;
+	opacity: 0.5;
+}
+
+.card:hover:not(:disabled):before {
+	background-color: var(--color-selected);
+}
+
+.arrow {
+	margin: var(--sp-small);
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	vertical-align: middle;
+	flex: 0 0 auto;
+	transform: translateX(-1.5em);
+	opacity: 0;
+	transition: 0.3s;
+	z-index: 1;
+	color: white;
+	font-size: var(--fs-massive);
+}
+
+.card:hover:not(:disabled) > .arrow {
+	transform: translateX(0);
+	opacity: 1;
+}
+
+.image {
+	opacity: 1;
+	transition: filter 0.4s;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center center;
+}
+
+.leftControl {
+	position: absolute;
+	top: var(--sp-base);
+	left: var(--sp-base);
+}
+
+.rightControl {
+	position: absolute;
+	top: var(--sp-base);
+	right: var(--sp-base);
+}
+
+.text {
+	pointer-events: none;
+	color: white;
+	text-shadow: 1px 1px 2px black;
+	font-size: var(--fs-massive);
+	margin: var(--sp-base);
+	z-index: 1;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}

@@ -1,0 +1,28 @@
+.card {
+	position: relative;
+	padding: var(--sp-base);
+}
+
+.title {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.cardEvidenceItems {
+	list-style-type: none;
+	padding: var(--sp-base);
+	margin: 0;
+	display: flex;
+	flex-direction: row;
+	background: red;
+}
+.dropIndicator {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	filter: blur(3px);
+}

@@ -1,0 +1,9 @@
+.wrapper {
+	padding: var(--sp-base);
+}
+
+.textInput {
+	box-sizing: border-box;
+	width: calc(100% - var(--sp-large));
+	margin: 0 var(--sp-base);
+}

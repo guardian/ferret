@@ -1,0 +1,46 @@
+.tweet {
+	display: flex;
+	flex-direction: row;
+	border: 1px solid var(--color-border);
+	background: var(--color-secondary-light);
+	max-width: 400px;
+}
+
+.image {
+	max-width: 10%;
+	border-right: 1px solid var(--color-border);
+	/* padding: var(--sp-base); */
+	min-width: 45px;
+}
+
+.actions {
+	display: flex;
+	flex-direction: row;
+}
+
+.text {
+	padding: var(--sp-base);
+}
+
+.meta {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.meta > span {
+	margin-right: var(--sp-base);
+}
+
+.username {
+	font-weight: bold;
+	margin-right: var(--sp-base);
+}
+
+.handle {
+	font-size: 0.9em;
+}
+
+.timestamp {
+	font-size: 0.9em;
+}

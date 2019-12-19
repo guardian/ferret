@@ -1,0 +1,19 @@
+.cardEvidenceItem {
+	border-radius: var(--radius-default);
+	border: 1px solid var(--color-border);
+	padding: var(--sp-base);
+	height: 40px;
+	width: 30px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.cardEvidenceItemPlaceholder {
+	composes: cardEvidenceItem;
+	background: var(--color-secondary);
+	border: dashed var(--sp-small) var(--color-border);
+	text-align: center;
+	vertical-align: middle;
+	line-height: 100px;
+}

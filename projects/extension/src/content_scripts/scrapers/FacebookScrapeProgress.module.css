@@ -1,0 +1,7 @@
+.statusTable {
+	width: 100%;
+}
+
+.dataSecondary {
+	padding-left: var(--sp-large);
+}
