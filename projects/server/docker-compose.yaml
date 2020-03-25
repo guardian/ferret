@@ -1,19 +1,6 @@
-version: "3"
+version: '3'
 
 services:
-  minio:
-    image: minio/minio
-    container_name: ferret-minio
-    environment:
-      MINIO_ACCESS_KEY: ferret
-      MINIO_SECRET_KEY: ferret
-    volumes:
-      - minio-data:/export
-    ports:
-      - 9001:9000
-    entrypoint: sh
-    command: -c 'mkdir -p /export/projects && mkdir -p /export/ingestions && /usr/bin/minio server /export'
-
   postgres:
     image: postgres:10.5-alpine
     container_name: ferret-postgres
@@ -27,8 +14,5 @@ services:
       - postgres-data:/var/lib/postgresql/data
 
 volumes:
-  minio-data:
-    driver: local
-
   postgres-data:
     driver: local

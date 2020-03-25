@@ -2,7 +2,7 @@ const { resolve } = require('path');
 const { CheckerPlugin } = require('awesome-typescript-loader');
 
 module.exports = {
-	mode: 'production',
+	mode: 'development',
 	resolve: {
 		extensions: ['.ts', '.js'],
 	},

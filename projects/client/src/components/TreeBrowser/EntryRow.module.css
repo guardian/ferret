@@ -1,0 +1,40 @@
+.row {
+	user-select: none;
+	outline: none;
+}
+
+.row[data-focused] {
+	background: var(--color-primary);
+	color: var(--color-primary-text);
+}
+
+.row:focus {
+	outline: 1px solid red;
+}
+
+.cell {
+	display: flex;
+	flex-direction: row;
+	padding: var(--sp-tiny) var(--sp-base);
+}
+
+.icon {
+	margin-right: var(--sp-base);
+}
+
+.openIcon {
+	composes: icon;
+	transition: 0.25s transform;
+}
+
+.openIcon[data-open] {
+	transform: rotate(90deg);
+}
+
+.iconUnknown {
+	composes: icon;
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	text-align: center;
+}

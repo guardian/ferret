@@ -1,9 +1,9 @@
 {
 	"manifest_version": 2,
-	"name": "Grabber",
-	"short_name": "Grabber",
+	"name": "Ferret",
+	"short_name": "Ferret",
 	"version": "1.0.0",
-	"description": "A utility for grabbing entities from various websites",
+	"description": "An extension for various journalistic purposes",
 	"icons": {
 		"128": "images/guardian-logo-128.png"
 	},

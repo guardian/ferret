@@ -4,10 +4,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { MdAddCircle } from 'react-icons/md';
 import { match } from 'react-router';
 import { TimelineEntriesEditor } from './TimelineEntriesEditor';
-import {
-	MultiPanelPage,
-	PanelData,
-} from '../../layout/MultiPanelPage/MultiPanelPage';
+import { MultiPanelPage } from '../../layout/MultiPanelPage/MultiPanelPage';
 import { getTimelines } from '../../services/project';
 import { NewPanelModal } from './NewPanelModal';
 
@@ -15,6 +12,14 @@ type TimelineEditorProps = {
 	match: match<{ pId: string; tId: string }>;
 };
 
+// ---------------------------------------------------
+// -- Deprecated in favor of the project panel view --
+// ---------------------------------------------------
+
+export const TimelineEditor = () => {
+	return <div>deprecated</div>;
+};
+/*
 export const TimelineEditor: FC<TimelineEditorProps> = ({ match }) => {
 	const [panels, setPanels] = useState([] as PanelData[]);
 
@@ -63,8 +68,12 @@ export const TimelineEditor: FC<TimelineEditorProps> = ({ match }) => {
 	const [modalOpen, setModalOpen] = useState(false);
 	return (
 		<React.Fragment>
-			<MultiPanelPage onResizePanel={onResizePanel} panels={panels} />
-			{/* <div
+			<MultiPanelPage
+				onResizePanel={onResizePanel}
+				panels={panels}
+				onClosePanel={() => {}}
+			/>
+			 <div
 				style={{
 					position: 'fixed',
 					bottom: 'var(--sp-base)',
@@ -83,7 +92,9 @@ export const TimelineEditor: FC<TimelineEditorProps> = ({ match }) => {
 						}}
 					/>
 				</WithModal>
-			</div> */}
+			</div> 
 		</React.Fragment>
 	);
 };
+
+*/

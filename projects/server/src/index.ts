@@ -1,6 +1,7 @@
 import bodyParser from 'body-parser';
 import express, { Request, Response } from 'express';
 import ip from 'ip';
+import busboy from 'connect-busboy';
 import { UsersController } from './controllers/UserController';
 import { getConfig } from './services/Config';
 import { Database } from './services/Database';
@@ -13,16 +14,24 @@ import { initAuth } from './services/Auth';
 import passport from 'passport';
 import { AuthController } from './controllers/AuthController';
 import { DatasetController } from './controllers/DatasetController';
+import { ImagesController } from './controllers/ImagesController';
+
+import fetch from 'node-fetch';
+import { Storage } from './services/Storage';
+import { Extractors } from './services/Extractors';
+(global as any).fetch = fetch;
 
 async function main() {
 	// Services
 	const config = getConfig();
 
-	//const storage = new Storage(config);
+	const storage = new Storage(config);
 
 	const db = new Database(config);
 	await db.connect();
 	await db.applyMigrations();
+
+	const extractors = new Extractors(config);
 
 	// TODO GoogleAuth
 
@@ -33,13 +42,21 @@ async function main() {
 	const feeds = new FeedsController(db);
 	const projects = new ProjectsController(db);
 	const tags = new TagsController(db);
-	const datasets = new DatasetController(db, config);
+	const datasets = new DatasetController(db, storage, extractors, config);
+	const images = new ImagesController(config);
 
 	// Routes
 	const port = 9999;
 	const app = express();
 	app.use(bodyParser.json());
 	app.use(passport.initialize());
+	app.use(
+		busboy({
+			limits: {
+				fileSize: config.app.maxUploadSize,
+			},
+		})
+	);
 
 	initAuth(db, config);
 
@@ -97,7 +114,14 @@ async function main() {
 	app.put('/api/jobs/:jId/heartbeat', ...jobs.heartbeatJob());
 
 	// Datasets
-	app.post('/api/datasets/:dId/docs', ...datasets.postDocument());
+	app.get('/api/datasets', ...datasets.listDatasets());
+	app.post('/api/datasets', ...datasets.createDataset());
+	app.get('/api/datasets/:dId', ...datasets.getDataset());
+	app.put('/api/datasets/:dId/type', ...datasets.changeDatasetType());
+	app.post('/api/datasets/:dId/files', ...datasets.uploadFile());
+
+	// Utils
+	app.get('/api/images/search', ...images.search());
 
 	app.get('/api/management/healthcheck', (req: Request, res: Response) =>
 		res.send('OK')

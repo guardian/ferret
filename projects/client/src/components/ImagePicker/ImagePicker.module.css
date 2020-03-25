@@ -1,0 +1,23 @@
+.picker > input {
+	width: 100%;
+}
+
+.thumbs {
+	margin-top: var(--sp-base);
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.picIcon {
+	cursor: pointer;
+	border-radius: 50%;
+	background: var(--color-primary);
+	width: var(--sp-base);
+	height: var(--sp-base);
+}
+
+.picIcon[data-selected] {
+	background: var(--color-selected);
+}

@@ -53,6 +53,7 @@
 	},
 	"dependencies": {
 		"@guardian/threads": "^0.21.36",
-		"html-webpack-root-plugin": "^0.10.0"
+		"html-webpack-root-plugin": "^0.10.0",
+		"md5": "^2.2.1"
 	}
 }

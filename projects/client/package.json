@@ -8,6 +8,7 @@
 		"@guardian/threads": "^0.21.36",
 		"create-react-context": "^0.3.0",
 		"history": "^4.10.1",
+		"human-date": "^1.4.0",
 		"jwt-decode": "^2.2.0",
 		"lodash": "^4.17.15",
 		"lodash.debounce": "^4.0.8",

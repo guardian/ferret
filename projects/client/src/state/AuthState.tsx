@@ -1,4 +1,11 @@
-import React, { useReducer, FC, ReactNode, useContext, Reducer } from 'react';
+import React, {
+	useReducer,
+	FC,
+	ReactNode,
+	useContext,
+	Reducer,
+	useEffect,
+} from 'react';
 import { User } from '@guardian/ferret-common';
 import { setAuthToken } from '../services/authFetch';
 import jwtDecode from 'jwt-decode';
@@ -81,13 +88,42 @@ type AuthProviderProps = {
 	children: ReactNode;
 };
 
-export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
+type Event = 'logout';
+type EventHandler = (event: Event) => void;
+
+const eventHandlers: EventHandler[] = [];
+
+export const getEventDispatchers = () => {
+	return {
+		logout: () => {
+			eventHandlers.forEach(handler => {
+				handler('logout');
+			});
+		},
+	};
+};
+
+const listenForEvents = (cb: EventHandler) => {
+	eventHandlers.push(cb);
+};
+
+export const AuthProvider: FC<AuthProviderProps> = function({ children }) {
 	const [state, dispatch] = useReducer(reducer, initialState);
+
+	useEffect(() => {
+		listenForEvents(event => {
+			if (event === 'logout') {
+				dispatch(clearToken());
+			}
+		});
+	}, []);
 
 	if (state.checkStorage) {
 		console.log('Initialising auth');
 		dispatch(init());
 	}
+
+	// register some callback here
 
 	return (
 		<AuthContext.Provider value={[state, dispatch]}>

@@ -18,6 +18,8 @@ import { Project } from './Project/Project';
 import { Projects } from './Projects/Projects';
 import { Settings } from './Settings/Settings';
 import { TimelineEditor } from './TimelineEditor/TimelineEditor';
+import { Datasets } from './Datasets/Datasets';
+import { Dataset } from './Dataset/Dataset';
 
 export const App = () => {
 	const [{ token, user }, dispatch] = useAuthState();
@@ -35,10 +37,15 @@ export const App = () => {
 			<Button appearance="transparent" to="/feeds" icon={<MdRssFeed />}>
 				Feeds
 			</Button>
-			<Button appearance="transparent" to="/alerts" icon={<TiBell />}>
+			<Button appearance="transparent" to="/alerts" disabled icon={<TiBell />}>
 				Alerts
 			</Button>
-			<Button appearance="transparent" to="/entities" icon={<TiFlowChildren />}>
+			<Button
+				appearance="transparent"
+				to="/entities"
+				disabled
+				icon={<TiFlowChildren />}
+			>
 				Entities
 			</Button>
 		</div>
@@ -87,6 +94,10 @@ export const App = () => {
 						/>
 						<Route exact path="/projects/:pId" component={Project} />
 						<Route exact path="/projects" component={Projects} />
+
+						{/* Datasets */}
+						<Route exact path="/datasets/:dId" component={Dataset} />
+						<Route exact path="/datasets" component={Datasets} />
 
 						{/* Settings */}
 						<Route exact path="/settings" component={Settings} />

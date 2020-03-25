@@ -1,14 +1,14 @@
-import { Pool, Client } from 'pg';
 import {
 	Feed,
+	FeedJob,
+	FeedJobStatus,
 	FeedParameters,
 	FeedType,
-	FeedJobStatus,
-	FeedJob,
 } from '@guardian/ferret-common';
+import parser from 'cron-parser';
+import { Pool } from 'pg';
 import uuidv4 from 'uuid';
 import { transactionally } from './helpers';
-import parser from 'cron-parser';
 
 export class FeedQueries {
 	pool: Pool;

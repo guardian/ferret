@@ -1,7 +1,6 @@
 export type Timeline = {
 	id: string;
 	title: string;
-	image: string;
 	createdBy: string;
 	createdOn: Date;
 };

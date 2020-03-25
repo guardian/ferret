@@ -1,87 +1,89 @@
-import { Timeline } from '@guardian/ferret-common';
-import { CenteredPage, WithModal } from '@guardian/threads';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { match } from 'react-router';
-import { ControlBox } from '../../components/ControlBox/ControlBox';
-import { MenuCard } from '../../components/MenuCard/MenuCard';
-import { history } from '../../index';
-import { getTimelines } from '../../services/project';
+import { MultiPanelPage } from '../../layout/MultiPanelPage/MultiPanelPage';
 import { useProjectsState } from '../../state/ProjectsState';
-import { NewTimelineModal } from './NewTimelineModal';
-import styles from './Project.module.css';
+import { ProjectFileBrowserPanel } from './ProjectFileBrowserPanel';
+import { WithModal, Button } from '@guardian/threads';
+import { NewPanelModal } from './NewPanelModal';
+import { Workspace } from '../../layout/Workspace/Workspace';
+import { ProjectWorkspacePanel } from './ProjectWorkspacePanel';
+import { ProjectTimelinePanel } from './ProjectTimelinePanel';
+
+export type ProjectPanelType = 'filebrowser' | 'workspace' | 'timeline';
+
+type ProjectPanel = {
+	id: string;
+	type: ProjectPanelType;
+};
 
 type ProjectProps = {
 	match: match<{ pId: string }>;
 };
 
 export const Project: FC<ProjectProps> = ({ match }) => {
-	// Projects from reducer
 	const [projects] = useProjectsState();
 
-	// Timelines stored locally
-	const [timelineModalOpen, setTimelineModalOpen] = useState(false);
-	const [timelines, setTimelines] = useState([] as Timeline[]);
+	const project = projects.find(p => p.id === match.params.pId)!;
 
-	const project = projects.find(p => p.id === match.params.pId);
+	const [newPanelModalOpen, setNewPanelModalOpen] = useState(false);
 
-	useEffect(() => {
-		if (project) {
-			getTimelines(project.id)
-				.then(p => setTimelines(p))
-				.catch(e => console.error(e));
-		}
-	}, []);
+	const [panels, setPanels] = useState([
+		{ type: 'filebrowser', id: 'default-fileview' },
+	] as ProjectPanel[]);
+
+	const addPanel = (id: string, type: ProjectPanelType) => {
+		setPanels([...panels, { id, type }]);
+	};
+	const closePanel = (id: string) => {
+		setPanels(() => panels.filter(p => p.id != id));
+	};
 
 	if (project) {
 		return (
-			<CenteredPage>
-				<h1>{project.title}</h1>
-				<ControlBox>
+			<MultiPanelPage
+				fab={
 					<WithModal
-						proxy={
-							<MenuCard
-								title="New Timeline"
-								backgroundImage="/images/plus.png"
-							/>
-						}
-						isOpen={timelineModalOpen}
-						setIsOpen={setTimelineModalOpen}
+						isOpen={newPanelModalOpen}
+						setIsOpen={setNewPanelModalOpen}
+						proxy={<Button>Feelin' FAB!</Button>}
 					>
-						<NewTimelineModal
-							pId={project.id}
-							onSuccess={() => {
-								setTimelineModalOpen(false);
-								getTimelines(project.id)
-									.then(timelines => setTimelines(timelines))
-									.catch(e => console.error(e));
+						<NewPanelModal
+							onConfirm={(id, type) => {
+								addPanel(id, type);
+								setNewPanelModalOpen(false);
 							}}
-							onError={() => alert('Failed to create project')}
+							onCancel={() => setNewPanelModalOpen(false)}
 						/>
 					</WithModal>
-				</ControlBox>
-				<div>
-					<div>
-						<div>Recent items</div>
-						<div>Activity</div>
-					</div>
-					Everything else
-				</div>
-				<h2>Recent Items</h2>
-				<div className={styles.cardContainer}>
-					<div className={styles.cards}>
-						{timelines.map(t => (
-							<MenuCard
-								key={t.id}
-								title={t.title}
-								onClick={() =>
-									history.push(`/projects/${project.id}/timelines/${t.id}`)
-								}
-								backgroundImage={t.image}
+				}
+			>
+				{panels.map(p => {
+					if (p.type === 'filebrowser') {
+						return (
+							<ProjectFileBrowserPanel
+								panelId={p.id}
+								project={project}
+								onClosePanel={closePanel}
 							/>
-						))}
-					</div>
-				</div>
-			</CenteredPage>
+						);
+					} else if (p.type === 'workspace') {
+						return (
+							<ProjectWorkspacePanel panelId={p.id} onClosePanel={closePanel} />
+						);
+					} else if (p.type === 'timeline') {
+						return (
+							<ProjectTimelinePanel
+								panelId={p.id}
+								onClosePanel={closePanel}
+								projectId={project.id}
+								timelineId={''}
+							/>
+						);
+					} else {
+						return <div>Unknown panel type: {p.type}</div>;
+					}
+				})}
+			</MultiPanelPage>
 		);
 	} else {
 		return null;

@@ -1,0 +1,21 @@
+.toolbar {
+	background: var(--color-primary);
+	color: var(--color-primary-text);
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	width: 100%;
+}
+
+.toolbar > div {
+	display: flex;
+	flex-direction: row;
+}
+
+.toolbar > div button {
+	margin-right: var(--sp-base);
+}
+
+.breadcrumbs {
+	font-weight: bold;
+}

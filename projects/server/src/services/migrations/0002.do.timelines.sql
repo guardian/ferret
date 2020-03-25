@@ -4,7 +4,6 @@ CREATE TABLE timelines (
     id         UUID PRIMARY KEY,
     project_id UUID REFERENCES projects(id) ON DELETE CASCADE NOT NULL,
     title      TEXT NOT NULL,
-    image      TEXT NOT NULL,
     created_by UUID REFERENCES users(id),
     created_on TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );

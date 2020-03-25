@@ -1,0 +1,11 @@
+{
+	"name": "@guardian/ferret-worker-agent",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "MIT",
+	"scripts": {
+		"start": "CONFIG_PATH=~/.ferret/worker-agent/conf ts-node src/index.ts"
+	},
+	"dependencies": {},
+	"devDependencies": {}
+}

@@ -24,18 +24,28 @@ const required = (directory: string, file: string): string => {
 };
 
 export const getConfig = () => {
-	const config = process.env['CONFIG_PATH']!;
+	const configPath = process.env['CONFIG_PATH']!;
 
 	return {
 		app: {
-			secret: required(config, 'app_secret'),
+			secret: required(configPath, 'app_secret'),
+			maxUploadSize: Number(required(configPath, 'app_max_upload_size')),
+			extractors: JSON.parse(required(configPath, 'app_extractors')),
 		},
 		database: {
-			host: required(config, 'db_host'),
-			port: Number(required(config, 'db_port')),
-			database: required(config, 'db_database'),
-			user: required(config, 'db_user'),
-			password: required(config, 'db_password'),
+			host: required(configPath, 'db_host'),
+			port: Number(required(configPath, 'db_port')),
+			database: required(configPath, 'db_database'),
+			user: required(configPath, 'db_user'),
+			password: required(configPath, 'db_password'),
+		},
+		storage: {
+			root: required(configPath, 'storage_root'),
+		},
+		unsplash: {
+			accessKey: required(configPath, 'unsplash_access_key'),
+			secretKey: required(configPath, 'unsplash_secret_key'),
+			callbackUrl: required(configPath, 'unsplash_callback_url'),
 		},
 	};
 };

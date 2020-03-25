@@ -4,6 +4,8 @@ import { createProject } from '../../services/project';
 import { MenuCard } from '../../components/MenuCard/MenuCard';
 
 import styles from './Projects.module.css';
+import { ImagePicker } from '../../components/ImagePicker/ImagePicker';
+import { CenterBox } from '../../components/CenterBox/CenterBox';
 
 type NewProjectModalProps = {
 	onSuccess: () => void;
@@ -42,21 +44,16 @@ export const NewProjectModal: FC<NewProjectModalProps> = ({
 					/>
 				</FormRow>
 				<FormRow title="Image">
-					<input
-						type="text"
-						disabled
-						value={newImage}
-						onChange={e => setNewImage(e.target.value)}
-					/>
+					<ImagePicker onChange={setNewImage} />
 				</FormRow>
 				<FormRow title="Preview">
-					<div className={styles.previewCard}>
+					<CenterBox>
 						<MenuCard
 							title={newName}
 							onClick={() => {}}
 							backgroundImage={newImage}
 						/>
-					</div>
+					</CenterBox>
 				</FormRow>
 				<FormRow horizontal>
 					<Button

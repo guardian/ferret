@@ -4,6 +4,8 @@ export type GridFeedParameters = {
 	query: string;
 };
 
+export type FeedType = 'grid' | 'twitter';
+
 export type Feed = {
 	id: string;
 	title: string;

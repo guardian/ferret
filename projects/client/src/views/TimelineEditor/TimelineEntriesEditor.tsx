@@ -15,6 +15,7 @@ import React, {
 	Component,
 	Ref,
 	RefObject,
+	useCallback,
 } from 'react';
 import { MdAddCircle, MdMenu } from 'react-icons/md';
 import { GoDiffRemoved } from 'react-icons/go';
@@ -51,7 +52,10 @@ export class TimelineEntriesEditor extends Component<
 		this.getEntries();
 	}
 
-	debouncedServerUpdate = _.debounce(updateTimelineEntry, 1000);
+	debouncedServerUpdate = useCallback(
+		_.debounce(updateTimelineEntry, 1000),
+		[]
+	);
 
 	getEntries = () => {
 		const { pId, tId } = this.props;
@@ -91,7 +95,11 @@ export class TimelineEntriesEditor extends Component<
 		newEntries.splice(to, 0, ...newEntries.splice(from, 1));
 		this.setEntries(newEntries);
 
-		reorderTimelineEntries(pId, tId, newEntries.map(e => e.id)).catch(err => {
+		reorderTimelineEntries(
+			pId,
+			tId,
+			newEntries.map(e => e.id)
+		).catch(err => {
 			this.setEntries(oldEntires);
 			alert('Failed to reorder timeline entires');
 			console.error(err);

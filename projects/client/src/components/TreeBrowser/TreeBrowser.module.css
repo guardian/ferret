@@ -1,0 +1,31 @@
+.root {
+	width: 100%;
+	border: 1px solid var(--color border);
+}
+
+.header {
+	user-select: none;
+	font-weight: bold;
+}
+
+.header > td {
+	padding: var(--sp-tiny) var(--sp-base);
+}
+
+.tree {
+	background: var(--color-secondary);
+	color: var(--color-secondary-text);
+	width: 100%;
+	table-layout: fixed;
+	border-collapse: collapse;
+}
+
+.tree td {
+	border: solid 1px var(--color-border);
+}
+
+.dropExtender {
+	border: 1px solid var(--color-border);
+	min-height: 20em;
+	height: 70%;
+}

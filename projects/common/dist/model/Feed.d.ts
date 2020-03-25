@@ -1,12 +1,12 @@
-export declare type FeedType = 'grid';
 export declare type FeedParameters = GridFeedParameters;
 export declare type GridFeedParameters = {
     query: string;
 };
+export declare type FeedType = 'grid' | 'twitter';
 export declare type Feed = {
     id: string;
     title: string;
-    type: FeedType;
+    type: string;
     datasetId: string;
     frequency: string;
     parameters: FeedParameters;

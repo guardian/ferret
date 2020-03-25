@@ -30,13 +30,12 @@ export const getTimelines = async (pId: string): Promise<Timeline[]> => {
 	return await res.json();
 };
 
-export const createTimeline = (pId: string, title: string, image: string) => {
+export const createTimeline = (pId: string, title: string) => {
 	return authFetch(`/api/projects/${pId}/timelines`, {
 		method: 'POST',
 		headers: new Headers({ 'Content-Type': 'application/json' }),
 		body: JSON.stringify({
 			title,
-			image,
 		}),
 	});
 };

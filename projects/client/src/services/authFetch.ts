@@ -1,3 +1,5 @@
+import { getEventDispatchers } from '../state/AuthState';
+
 let token: string | undefined = undefined;
 
 export const setAuthToken = (newToken: string) => {
@@ -17,8 +19,8 @@ export const authFetch = async (url: string, init?: RequestInit) => {
 	const res = await fetch(authRequest);
 
 	if (!res.ok) {
-		// TODO clear token out of reducer
-		throw Error('Failed to fetch');
+		const { logout } = getEventDispatchers();
+		logout();
 	}
 
 	return res;

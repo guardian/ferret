@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useCallback } from 'react';
 import styles from './EditableText.module.css';
 import { parseDate } from './parseDate';
 import _ from 'lodash';
@@ -69,7 +69,10 @@ export const EditableText: FC<EditableTextProps> = ({
 		}
 	};
 
-	const debouncedCheckDateValid = _.debounce(checkDateValid, 500);
+	const debouncedCheckDateValid = useCallback(
+		_.debounce(checkDateValid, 500),
+		[]
+	);
 
 	const renderEditable = () => {
 		switch (usedMode) {

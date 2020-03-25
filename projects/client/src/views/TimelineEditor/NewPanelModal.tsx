@@ -8,11 +8,10 @@ import {
 } from '@guardian/threads';
 import React, { FC, useState } from 'react';
 import { MdMenu } from 'react-icons/md';
-import { PanelData } from '../../layout/MultiPanelPage/MultiPanelPage';
 import uuidv4 from 'uuid';
 
 type NewPanelModalProp = {
-	onSubmit: (panel: PanelData) => void;
+	onSubmit: () => void;
 };
 
 export const NewPanelModal: FC<NewPanelModalProp> = ({ onSubmit }) => {
@@ -27,7 +26,7 @@ export const NewPanelModal: FC<NewPanelModalProp> = ({ onSubmit }) => {
 		</WithDropdownMenu>
 	);
 	const submit = () => {
-		onSubmit({ id: uuidv4(), width: 500, title, menu });
+		//onSubmit({ id: uuidv4(), width: 500, title, menu });
 	};
 
 	return (

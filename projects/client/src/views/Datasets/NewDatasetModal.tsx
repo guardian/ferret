@@ -1,17 +1,17 @@
-import React, { useState, FC } from 'react';
+import React, { useState, useEffect, FC } from 'react';
 import { Panel, Form, FormRow, Button } from '@guardian/threads';
-import { createProject, createTimeline } from '../../services/project';
+import { createDataset } from '../../services/datasets';
 import { MenuCard } from '../../components/MenuCard/MenuCard';
+import styles from './NewDatasetModal.module.css';
+import { searchImages } from '../../services/images';
+import { ImagePicker } from '../../components/ImagePicker/ImagePicker';
+import { CenterBox } from '../../components/CenterBox/CenterBox';
 
-import styles from './Project.module.css';
-
-type NewTimelineModalProps = {
-	pId: string;
+type NewDatasetModalProps = {
 	onSuccess: () => void;
 	onError: () => void;
 };
-export const NewTimelineModal: FC<NewTimelineModalProps> = ({
-	pId,
+export const NewDatasetModal: FC<NewDatasetModalProps> = ({
 	onSuccess,
 	onError,
 }) => {
@@ -20,11 +20,11 @@ export const NewTimelineModal: FC<NewTimelineModalProps> = ({
 	const [newImage, setNewImage] = useState('/kobane.jpeg');
 
 	return (
-		<Panel title="New Timeline">
+		<Panel title="New Dataset">
 			<Form
 				onSubmit={() => {
 					setProcessing(true);
-					createTimeline(pId, newName, newImage)
+					createDataset(newName, newImage)
 						.then(() => {
 							setProcessing(false);
 							onSuccess();
@@ -44,21 +44,16 @@ export const NewTimelineModal: FC<NewTimelineModalProps> = ({
 					/>
 				</FormRow>
 				<FormRow title="Image">
-					<input
-						type="text"
-						disabled
-						value={newImage}
-						onChange={e => setNewImage(e.target.value)}
-					/>
+					<ImagePicker onChange={setNewImage} />
 				</FormRow>
 				<FormRow title="Preview">
-					<div className={styles.previewCard}>
+					<CenterBox>
 						<MenuCard
 							title={newName}
 							onClick={() => {}}
 							backgroundImage={newImage}
 						/>
-					</div>
+					</CenterBox>
 				</FormRow>
 				<FormRow horizontal>
 					<Button

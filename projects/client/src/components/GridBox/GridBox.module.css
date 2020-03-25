@@ -1,0 +1,17 @@
+.emptyMessage {
+	width: 100%;
+	font-size: var(--fs-large);
+	margin-top: var(--sp-large);
+	text-align: center;
+}
+
+.grid {
+	min-width: 600px;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+.grid > *:not(:last-child) {
+	margin-right: var(--sp-base);
+}

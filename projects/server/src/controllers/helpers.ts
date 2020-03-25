@@ -38,8 +38,6 @@ export const checkHmacAuth = (secret: string) => (
 
 		const serverHash = 'HMAC ' + hmac.digest('base64');
 
-		console.log(`Send - ${hash}`);
-		console.log(`Gen  - ${serverHash}`);
 		if (hash === serverHash) {
 			return next();
 		} else {

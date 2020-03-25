@@ -1,15 +1,16 @@
-import { CenteredPage, WithModal } from '@guardian/threads';
+import { CenteredPage, WithModal, Button } from '@guardian/threads';
 import React, { useEffect, useState } from 'react';
 import { ControlBox } from '../../components/ControlBox/ControlBox';
 import { MenuCard } from '../../components/MenuCard/MenuCard';
 import { history } from '../../index';
 import { NewProjectModal } from './NewProjectModal';
-import styles from './Projects.module.css';
 import { getProjects } from '../../services/project';
 import { useProjectsState, setProjects } from '../../state/ProjectsState';
+import { GridBox } from '../../components/GridBox/GridBox';
 
 export const Projects = () => {
 	const [projects, dispatch] = useProjectsState();
+	const [filter, setFilter] = useState('');
 
 	useEffect(() => {
 		getProjects()
@@ -23,10 +24,12 @@ export const Projects = () => {
 		<CenteredPage>
 			<h1>Projects</h1>
 			<ControlBox>
+				<input
+					placeholder="Filter projects..."
+					onChange={e => setFilter(e.target.value)}
+				/>
 				<WithModal
-					proxy={
-						<MenuCard title="New Project" backgroundImage="/images/plus.png" />
-					}
+					proxy={<Button>New Project</Button>}
 					isOpen={createModalOpen}
 					setIsOpen={setCreateModalOpen}
 				>
@@ -41,10 +44,10 @@ export const Projects = () => {
 					/>
 				</WithModal>
 			</ControlBox>
-			<h2>Recent Projects</h2>
-			<div className={styles.cardContainer}>
-				<div className={styles.cards}>
-					{projects.map(p => (
+			<GridBox emptyMessage="No projects...">
+				{projects
+					.filter(p => p.title.toLowerCase().startsWith(filter.toLowerCase()))
+					.map(p => (
 						<MenuCard
 							key={p.id}
 							title={p.title}
@@ -52,8 +55,7 @@ export const Projects = () => {
 							backgroundImage={p.image}
 						/>
 					))}
-				</div>
-			</div>
+			</GridBox>
 		</CenteredPage>
 	);
 };

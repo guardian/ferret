@@ -27,8 +27,8 @@ export class ProjectQueries {
 
 		return rows.map(row => ({
 			id: row['id'],
-			title: row['title'],
 			image: row['image'],
+			title: row['title'],
 			access: row['access_level'],
 		}));
 	};
@@ -75,7 +75,7 @@ export class ProjectQueries {
 
 	listTimelines = async (pId: string): Promise<Timeline[]> => {
 		const { rows } = await this.pool.query({
-			text: `SELECT id, title, image, created_by, created_on 
+			text: `SELECT id, title, created_by, created_on 
 				FROM timelines 
 				WHERE project_id = $1`,
 			values: [pId],
@@ -84,7 +84,6 @@ export class ProjectQueries {
 		return rows.map(row => ({
 			id: row['id'],
 			title: row['title'],
-			image: row['image'],
 			createdBy: row['access_level'],
 			createdOn: row['access_level'],
 		}));
@@ -140,16 +139,15 @@ export class ProjectQueries {
 	insertTimeline = async (
 		userId: string,
 		projectId: string,
-		title: string,
-		image: string
+		title: string
 	): Promise<void> => {
 		transactionally(this.pool, async client => {
 			const timelineId = uuidv4();
 
 			await client.query({
 				text:
-					'INSERT INTO timelines (id, project_id, title, image, created_by) VALUES ($1, $2, $3, $4, $5)',
-				values: [timelineId, projectId, title, image, userId],
+					'INSERT INTO timelines (id, project_id, title, created_by) VALUES ($1, $2, $3, $4, $5)',
+				values: [timelineId, projectId, title, userId],
 			});
 
 			await client.query({
@@ -157,6 +155,10 @@ export class ProjectQueries {
 				values: [uuidv4(), timelineId],
 			});
 
+			// await client.query({
+			// 	text: `INSERT INTO files (dataset_id, path, type, blob_id) VALUES ($1, $2, 'timeline', $3)`,
+			// 	values: [datasetId, path, fsr.hash],
+			// });
 			return;
 		});
 	};
