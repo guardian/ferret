@@ -10,7 +10,7 @@
 		"history": "^4.10.1",
 		"human-date": "^1.4.0",
 		"jwt-decode": "^2.2.0",
-		"lodash": "^4.17.15",
+		"lodash": "^4.17.21",
 		"lodash.debounce": "^4.0.8",
 		"prop-types": "^15.7.2",
 		"react": "^16.10.2",
